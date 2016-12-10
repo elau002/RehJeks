@@ -12,7 +12,7 @@ angular.module('rehjeks.solve', [])
   var challStartTime = new Date();
 
 
-  var updateTimer = function(startTime){
+  var updateTimer = function(startTime) {
     var now = new Date();
     var secondsElapsed = Math.floor( (now - startTime) / 1000 );
     $scope.seconds = secondsElapsed % 60;
@@ -36,7 +36,9 @@ angular.module('rehjeks.solve', [])
   // $scope functions
   ////////////////////////
 
-  $scope.checkGex = function(){
+
+  $scope.checkGex = function() {
+
     var valid = validation.test($scope.attempt);
     if (valid) {
       $scope.highlight();
@@ -44,15 +46,15 @@ angular.module('rehjeks.solve', [])
     $scope.regexValid = valid;
 
 
-    console.log("Valid Regix = ", $scope.RegexValid);
-    console.log("body is ", $scope.attempt.match(regexBody));
-    console.log("flags are ", $scope.attempt.match(regexFlags));
+    console.log('Valid Regix = ', $scope.RegexValid);
+    console.log('body is ', $scope.attempt.match(regexBody));
+    console.log('flags are ', $scope.attempt.match(regexFlags));
 
   };
 
   $scope.checkSolution = function() {
     // Only check solution if user has input valid regex
-    if($scope.regexValid){
+    if ($scope.regexValid) {
       // Disaggregate user's input into regex components
 
       var attemptRegex = makeRegex();
@@ -60,13 +62,13 @@ angular.module('rehjeks.solve', [])
       // Create matches for user's input
       var userAnswers = $scope.challengeData.text.match(attemptRegex);
 
-      console.log("__you got: ", userAnswers);
+      console.log('__you got: ', userAnswers);
 
       // Compare user's answers to challenge answers
       var correctSolution = solutionsMatch(userAnswers, $scope.challengeData.expected);
-      console.log("answers match ", correctSolution);
+      console.log('answers match ', correctSolution);
 
-      if(correctSolution) {
+      if (correctSolution) {
         // Submit solution to server
         $scope.timeToSolve = new Date() - challStartTime;
 
@@ -93,26 +95,28 @@ angular.module('rehjeks.solve', [])
     let highlightedText = $scope.challengeData.text.replace(currentRegex,
       '<span class="highlighted-text">$&</span>');
 
-      $scope.highlightedText = $sce.trustAsHtml(highlightedText);
-    }
+    $scope.highlightedText = $sce.trustAsHtml(highlightedText);
+  };
 
   $scope.next = function() {
     Server.submitUserSolution($scope.attempt, $scope.challengeData.id, $scope.timeToSolve);
-    console.log("______Called submitUserSolution factory")
+    console.log('______Called submitUserSolution factory');
     $interval.cancel(solutionClock);
     $scope.success = false;
     $scope.failure = false;
     $scope.getRandom();
-  }
+  };
 
 
   $scope.getRandom = function() {
-    console.log("SolveController calling getRandom")
+    console.log('SolveController calling getRandom');
     Server.getRandom($scope)
     .then((testString) => $scope.highlightedText = $sce.trustAsHtml(testString));
     $scope.success = false;
     $scope.failure = false;
-    $scope.attempt = "//gi";
+    $scope.attempt = '//gi';
+    challStartTime = new Date();
+
   };
 
 
@@ -123,12 +127,14 @@ angular.module('rehjeks.solve', [])
   // Load Challenge
   if (Server.currentChallenge.data !== undefined) {
     $scope.challengeData = Server.currentChallenge.data;
+    $scope.highlightedText = $sce.trustAsHtml(Server.currentChallenge.data.text);
+    $scope.attempt = '//gi';
   } else {
     $scope.getRandom();
   }
 
   // Start Timer
-  var solutionClock = $interval(function(){
+  var solutionClock = $interval(function() {
     updateTimer(challStartTime);
     // console.log('$scope.seconds is ', $scope.seconds);
   }, 1000);
@@ -139,21 +145,21 @@ angular.module('rehjeks.solve', [])
 
     // Create new regex object
     return new RegExp(attemptBody, attemptFlags);
-  }
+  };
 
 
 });
 
-  var solutionsMatch = function(arr1, arr2) {
+var solutionsMatch = function(arr1, arr2) {
     if (!arr2 || !arr1) {
       return false;
     }
     var i;
-    if(arr1.length !== arr2.length){
+    if (arr1.length !== arr2.length) {
       return false;
     }
-    for(i = 0; i < arr1.length; i++) {
-      if(arr1[i] !== arr2[i]) {
+    for (i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
         return false;
       }
     }

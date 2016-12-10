@@ -6,7 +6,6 @@ angular.module('rehjeks.useroptions', [
   $scope.loggedin = true;
   $scope.logout = function(){
     console.log("logging out");
-    Auth.logout();
     $cookies.remove('username');
     window.GlobalUser.username = '';
     $scope.loggedin = false;

@@ -23,7 +23,6 @@ button:hover {
   background: -moz-linear-gradient(bottom right, #eee, #fff); /* for firefox 3.6 to 15 */
   background: linear-gradient(to bottom right, #EEE, #FFF); /* Standard syntax */
 
-
 }
 
 .challenge-prompt-title {
@@ -57,12 +56,11 @@ button:hover {
 
 .challenge-expected {
   text-align: center;
-
 }
 
 #regexAttempt {
   font-size: 24px;
-  width:300px;
+  width: 50%;
   margin: 20px 0 20px 20px;
   color: green;
   border-style: none;
@@ -105,6 +103,7 @@ button:hover {
 
 .challenge-blurb {
   width: 600px;
+
   border: solid 1px #282;
   background: #DDD; /* For browsers that do not support gradients */
   background: -webkit-linear-gradient(left top, #E0E8E0, #D0E8D0); /* For Safari 5.1 to 6.0 */
@@ -124,6 +123,24 @@ button:hover {
 
 .challenge-blurb:active {
   background: #FFF;
+
+}
+
+.challenge-title {
+  float: left;
+  left: 50px;
+}
+
+.challenge-desc {
+  text-align: center;
+  down: 50px;
+}
+
+.challenge-difficulty {
+  float: right;
+  margin-right: 20px;
+  text-align: right;
+  color: #777;
 }
 
 .green-box {
@@ -176,7 +193,6 @@ nav ul li a:hover {
 .challengeBlurb:hover {
   background-color: #eeeeee;
   cursor: pointer;
-
 }
 
 .challengeTitle,
@@ -203,6 +219,26 @@ nav ul li a:hover {
 h1 .cute{
   color: green;
   /*color: #245fbf;*/
+}
+
+.user-options li {
+  display: block;
+  font-size: 18px;
+  font-family: Helvetica;
+  text-decoration: none;
+}
+
+.user-options li:hover {
+  text-decoration: none;
+  background: #DDD; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #999, #BBB); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #999, #BBB); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #999, #BBB); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #999, #BBB); /* Standard syntax */
+  border-radius: 5px;
+  border-style: solid 1px #555;
+
+
 }
 
 .switch {
@@ -241,6 +277,8 @@ h1 .cute{
   background-color: #AAA;
   opacity: 1;
   z-index: 5;
+  border-radius: 0px 0px 0px 5px;
+
 }
 
 .login-form {
@@ -286,6 +324,7 @@ h1 .cute{
   width: 500px;
   border-radius: 5px;
 }
+
 
 label#difficulty {
   color: white;

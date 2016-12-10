@@ -4,10 +4,10 @@ var Challenge = require('./challengeModel');
 
 
 var localDb = 'mongodb://127.0.0.1:27017/rehjeks';
-var hostedDb = 'mongodb://heroku_rhmw8v8m:ugiqvmqosj3ed5et4c2o3hh0or@ds127938.mlab.com:27938/heroku_rhmw8v8m';
-//var currentDb = process.env.MONGODB_URI || localDb;
 
-//PLEASE CHOOSE WHICH DB TO STUB
+var deployedDb = 'mongodb://heroku_rhmw8v8m:ugiqvmqosj3ed5et4c2o3hh0or@ds127938.mlab.com:27938/heroku_rhmw8v8m';
+var devDb = 'mongodb://heroku_4jtklz9c:rp6b84vg6f1h0qhl7g1ajh9csj@ds127948.mlab.com:27948/heroku_4jtklz9c';
+
 var db = mongoose.connect(localDb);
 
 
