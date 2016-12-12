@@ -10,9 +10,9 @@ var userSchema = mongoose.Schema({
   username: String,
   pw: String
 },
-  {
-    timestamps: true
-  });
+{
+  timestamps: true
+});
 
 userSchema.pre('save', function(next) {
   if (!this.id) {

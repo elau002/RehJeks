@@ -1,17 +1,41 @@
-<div id='solve'>
-  <h1>User Profile</h1>
-  <h2>User Solutions</h2>
-  <div class='solutions view'>
-  	<button ng-click='show()'>Show Challenges</button>
-  	<div class='challengeBlurb' ng-show='user.show' ng-repeat='challenge in user.challenges'>
-  		<div id='problem' ng-click='show=!show'>
-	 			<div class='challengeTitle'><h3>Title: {{challenge.challenge.title}}</h3></div>
-	 			<div class='challengeDesc'>Prompt: {{challenge.challenge.prompt}}</div>
-	 			<div>Difficulty: {{challenge.challenge.difficulty}}</div>
-	 		</div>
-	 			<div class='solution' ng-hide='show'>
-	 				Soltution: {{challenge.solution.solution}}
-	 			</div>
+<div id='profile'>
+  <h1 class="stats-title">{{ username }}'s Stats</h1>
+  <hr>
+  <h2>Solved Problems</h2>
+  <div class=''>
+    <h4>Problem Breakdown</h4>
+      <p> Easy: {{user.difficulties.easy}}</p>
+      <p> Medium: {{user.difficulties.medium}}</p>
+      <p> Hard: {{user.difficulties.hard}}</p>
+  </div>
+  <div class='solutions-view'>
+  	<!-- <button ng-click='show()'>Show Challenges</button> -->
+  	<div class='challenge-blurb' ng-class='{"showing-solution": !show}' ng-click='show=!show' ng-repeat='challenge in user.challenges'>
+      <div class="container row">
+        <div class="col col-md-4 col-xs-4 col-lg-4">
+          <h3 class="challenge-blurb-title">{{challenge.challenge.title}}</h3>
+          <br>
+          <p class="challenge-blurb-difficulty {{challenge.challenge.difficulty}}"><br>{{challenge.challenge.difficulty}}</p>
+        </div>
+        <div class="col col-md-8 col-xs-8 col-lg-8">
+          <br>
+          <br>
+          <p class="challenge-blurb-desc">{{challenge.challenge.prompt}}</p>
+        </div>
+      </div>
+ 			<div class='solution' ng-hide='show'>
+        <hr>
+        <div class='row'>
+   				<div class='col col-xs-6 col-md-6 col-lg-6'>
+            <h4 class="challenge-blurb-solution-title">Your solution: </h4>
+            <p class="challenge-blurb-solution">{{challenge.solution.solution}}</p>
+          </div>
+          <div class='col col-xs-6 col-md-6 col-lg-6'>
+            <br>
+            <h4 class="challenge-blurb-time">Time to solve: {{showTime(challenge.solution.timeToSolve)}}</h4>
+     			</div>
+        </div>
+      </div>
   	</div>
   </div>
 </div>

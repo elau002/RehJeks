@@ -1,57 +1,54 @@
+<div id="solve-nav">
+  <br>
+  <label id="difficulty">Difficulty:
+    <br>
+    <select name="difficulty" id="difficulty" ng-model="difficulty" ng-change="getAllChallenges()">
+      <option value="">random</option>
+      <option value="easy">easy</option>
+      <option value="medium">medium</option>
+      <option value="hard">hard</option>
+    </select>
+  </label>
+  <br>
+  <br>
+  <button ng-click='getRandom()' class="skip-button">New Challenge</button>
+  <br>
+  <br>
+  <div id="time-left">
+    {{ minutes + ":" + (seconds < 10 ? "0" + seconds : seconds) }}
+  </div>
+</div>
+
 <div id='solve'>
-  <h1>Solve</h1>
-  <hr>
-  <div class="row">
-    <div class="col col-md-4" id="solve-nav">
-      <label id="difficulty">Choose difficulty:
-        <br>
-        <select name="difficulty" id="difficulty" ng-model="difficulty" ng-change="getAllChallenges()">
-          <option value="easy">easy</option>
-          <option value="medium" selected>medium</option>
-          <option value="hard">hard</option>
-        </select>
-      </label>
-      <br>
-      <br>
-      <button ng-click='getRandom()' class="skip-button">Skip --></button>
-      <br>
-      <br>
-      <div id="time-left">
-        {{ minutes + ":" + (seconds < 10 ? "0" + seconds : seconds) }}
-      </div>
-    </div>
+  <div class="challenge-prompt">
+    <h3 class="challenge-prompt-title">{{challengeData.title}}</h3>
+    <br>
+    <p class="challenge-description">{{challengeData.prompt}}</p>
+    <br>
+    <p class="challenge-expected-label">Test String:</p>
+    <p class="challenge-text" ng-bind-html="highlightedText"></p>
+    <br>
+    <h4 class="challenge-expected-label">Expected Matches:</h4>
+    <p class="challenge-expected">{{challengeData.expected}}</p>
+  </div>
 
-    <div class="col col-md-8" id="solve-space">
-
-      <div class="container challenge-prompt">
-        <h3 class="challenge-prompt-title">{{challengeData.title}}</h3>
-        <br>
-        <p class="challenge-description">{{challengeData.prompt}}</p>
-        <br>
-        <p class="challenge-expected-label">Test String:</p>
-
-        <p class="challenge-text" ng-bind-html="highlightedText"></p>
-        <br>
-        <h4 class="challenge-expected-label">Expected Matches:</h4>
-        <p class="challenge-expected">{{challengeData.expected}}</p>
-      </div>
-      <div class="container solve-form">
-        <form name="solveForm" ng-submit='checkSolution()'>
-          <input id="regexAttempt" type="text" ng-model='attempt' ng-change="checkGex()" placeholder="/regexHERE/gi" title="Try /example/gi" >
-          <button>Submit</button>
-        </form>
-      </div>
-      <br>
-      <br>
-      <div ng-if="success" class="green-box">
-        Great Job! <a ng-click="next()">Get New Challenge!</a>
-      </div>
-      <div ng-if="failure" class="red-box">
-        Tests failed! Expected {{ challengeData.expected }}, your RegEx matched {{ attemptMatch || "nothing :(" }}.
-      </div>
-      <div ng-if="invalid" class="red-box">
-        Invalid RegEx!
-      </div>
-    </div>
+  <div class="solve-form">
+    <form name="solveForm" ng-submit='submit()'>
+      <input id="regex-attempt" type="text" ng-model='attempt' ng-change="checkRegex()" placeholder="/regexHERE/gi" focus-on-me>
+    </form>
+  </div>
+  <br>
+  <br>
+  <div ng-if="success" class="green-box fade fade-slow">
+    Great Job! Press Enter to submit and get a new challenge
+  </div>
+  <div ng-if="failure" class="red-box fade fade-fast">
+    Tests failed! Expected {{ challengeData.expected }}, your RegEx matched {{ attemptMatch || "nothing :(" }}.
+  </div>
+  <div ng-if="showHint" class="show-type-hint fade">
+    (Just Start Typing)
+  </div>
+  <div ng-if="false" class="red-box fade fade-fast">
+    Invalid RegEx!
   </div>
 </div>

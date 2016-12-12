@@ -1,27 +1,55 @@
-<div id='challenges'>
-  <h1>Choose your challenge!</h1>
+<div class="challenge-options" id="challenges-nav">
+
+  <label>Difficulty:
+    <br>
+    <select name="difficulty" id="difficulty" ng-model="difficulty" ng-change="getAllChallenges()">
+      <option value="">all</option>
+      <option value="easy">easy</option>
+      <option value="medium">medium</option>
+      <option value="hard">hard</option>
+    </select>
+  </label>
+
   <hr>
-  <div class="row">
-    <div class="col col-md-4" id="challengesNav">
-      <label id="difficulty">Choose difficulty:
-        <br>
-        <select name="difficulty" id="difficulty" ng-model="difficulty" ng-change="getAllChallenges()">
-          <option value="easy">easy</option>
-          <option value="medium" selected>medium</option>
-          <option value="hard">hard</option>
-          <option value="mega hard">mega hard</option>
-        </select>
-      </label>
-    </div>
-    <div class="col col-md-8" id="challengesList">
-      <div ng-repeat="challenge in challengeList" class="container challenge-blurb" ng-click="getChallenge(challenge)">
-        <div class="container">
-          <h3 class="challenge-title">{{challenge.title}}</h3>
-          <p class="challenge-difficulty"><br>{{challenge.difficulty}}</p>
+
+  <label>Per page:
+    <br>
+    <select name="quantity" id="quantity" ng-model="quantity" ng-change="getAllChallenges()">
+      <option value="5">5</option>
+      <option value="">10</option>
+      <option value="20">20</option>
+      <option value="9999">all</option>
+    </select>
+  </label>
+
+</div>
+
+<div id='challenges'>
+  <div class="row challenge-container">
+    <div class="col" id="challenges-list">
+
+      <div ng-repeat="challenge in challengeList" class="challenge-blurb" ng-click="getChallenge(challenge)">
+
+        <hr>
+
+        <div class="row">
+          
+          <div class="col col-md-4 col-xs-4 col-lg-4">
+            <h3 class="challenge-blurb-title">{{challenge.title}}</h3>
+            <br>
+            <p class="challenge-blurb-difficulty {{challenge.difficulty}}"><br>{{challenge.difficulty}}</p>
+          </div>
+
+          <div class="col col-md-8 col-xs-8 col-lg-8">
+            <br>
+            <p class="challenge-blurb-prompt">Prompt</p>
+            <p class="challenge-blurb-desc">{{challenge.prompt}}</p>
+          </div>
 
         </div>
-        <p class="challenge-desc">{{challenge.prompt}}</p>
+
       </div>
+
     </div>
   </div>
 </div>

@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var shortid = require('shortid');
 mongoose.Promise = require('bluebird');
 
-
 var challengeSchema = mongoose.Schema({
   id: String,
   userId: String,
@@ -14,9 +13,9 @@ var challengeSchema = mongoose.Schema({
   answer: String,
   cheats: [String]
 },
-  {
-    timestamps: true
-  });
+{
+  timestamps: true
+});
 
 challengeSchema.pre('save', function(next) {
   if (!this.id) {
@@ -26,4 +25,3 @@ challengeSchema.pre('save', function(next) {
 });
 
 module.exports = mongoose.model('Challenge', challengeSchema);
-

@@ -27,12 +27,18 @@ module.exports.getOtherSolutions = function(req, res) {
 
 module.exports.addUserSolution = function(req, res) {
   // Adds a (correct) solution to the database.
-  console.log('req.body is ____', req.body);
 
-  Solution.create(req.body)
+  let {body: {userId, username, challengeId, solution, timeToSolve}} = req;
+
+  User.findOne(userId ? {id: userId} : {username: username})
+  .then(user => Solution.create({
+    userId: user.id,
+    challengeId: challengeId,
+    solution: solution,
+    timeToSolve: timeToSolve
+  }))
   .then(data => console.log(data))
   .then(something => res.send(200))
   .catch(err => { res.sendStatus(500); console.log(err); });
 
 };
-

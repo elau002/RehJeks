@@ -1,42 +1,65 @@
-<div id='solve'>
-  <h1>Submit</h1>
-  <hr>
-  <div class="col col-md-8" id="submitSpace">
-    <div class='challengePrompt'>
-      <form name="submitForm" ng-submit='submit()'>
-        <label>Challenge Title</label>
-        <input class='textInput' id="title" type="text" ng-model="title" placeholder="Challenge Title Here">
-        <br>
+  <div class="container" id="submit-space">
+    <h3>Submit a Challenge!</h3>
+    <div class="container col col-md-8 challengePrompt">
+      <form ng-model="formSubmit" class="form-horizontal" name="submitForm" ng-submit='submit()'>
+        <div class = "control-group">
+          <label class="control-label">Title</label>
+          <input class='textInput' type="text" ng-model="submitData.title" placeholder="title" required>
+          <br>
+          <br>
+        </div>
 
-        <label>Prompt</label>
-        <input class='textInput' id="prompt" type="text" ng-model="prompt" placeholder="Challenge Prompt Here">
-        <br>
+        <div class = "control-group">
+          <label class="control-label">Prompt</label>
+          <input class='textInput' type="text"  ng-model="submitData.prompt" placeholder="prompt" required>
+          <br>
+          <br>
+        </div>
 
-        <label>Text</label>
-        <input class='textInput' id="text" type="text" ng-model="text" placeholder="Challenge Text Here">
-        <br>
+        <div class = "control-group">
+          <label class="control-label">Text</label>
+          <textarea class='textInput' type="text" ng-model="submitData.text" ng-change='onUpdate()' placeholder="test string" required>
+          ></textarea>
+          <br>
+          <br>
+        </div>
 
-        <label>Difficulty</label>
-        <select class='textInput' name="difficulty" id="difficulty" ng-model="difficulty">
-          <option value="easy">easy</option>
-          <option value="medium" selected>medium</option>
-          <option value="hard">hard</option>
-        </select>
-        <br>
+        <div class = "control-group">
+          <label class="control-label">Difficulty</label>
+          <select required class='textInput' name="difficulty" ng-model="submitData.difficulty">
+            <option value="">None</option>
+            <option value="easy">easy</option>
+            <option value="medium" selected>medium</option>
+            <option value="hard">hard</option>
+          </select>
+          <br>
+          <br>
+        </div>
 
-        <label>Expected</label>
-        <input class='textInput' id="expected" type="text" ng-model="expected" placeholder="Expected match here">
-        <br>
+        <div class = "control-group">
+          <label class="control-label">Answer</label>
+          <input class='textInput' type="text" ng-model="submitData.answer" ng-change='onUpdate()' placeholder="solution answer" required>
+          <br>
+          <br>
+        </div>
 
-        <label>Answer</label>
-        <input class='textInput' id="answer" type="text" ng-model="answer" placeholder="Correct Answer here">
-        <br>
+        <div class = "control-group">
+          <label class="control-label">Cheats</label>
+          <input class='textInput' type="text" ng-model="submitData.cheats" placeholder="cheats">
+          <br>
+        </div>
 
-        <label>Cheats</label>
-        <input class='textInput' id="cheats" type="text" ng-model="cheats" placeholder="Cheats here">
-        <br>
-
-        <button>Submit</button>
+        <!-- <button ng-if="submitData.answer" ng-click="submitExpectedController.toggle = true">Expected Matches</button> -->
+        <div ng-if="submitData.answer">
+            Expected match {{submitData.expected()}}
+        </div>
+        <button type="submit" class="btn submitButton">Submit New Challenge</button>
       </form>
     </div>
-</div>
+  </div>
+  <div class="green-box" ng-if="submitted">
+    Thanks for submitting!
+  </div>
+  <div class="red-box" ng-if="unsanitary">
+    Please XSS other people instead.
+  </div>

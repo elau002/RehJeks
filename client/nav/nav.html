@@ -1,14 +1,13 @@
 <nav>
     <ul>
-        <li><a ui-sref="solve">Solve</a></li>
-        <li><a ui-sref="challenges">Challenges</a></li>
-        <li><a ui-sref="submit">Submit</a></li>
+        <li><a ui-sref="solve" class="nav-button">Solve</a></li>
+        <li><a ui-sref="challenges" class="nav-button">Challenges</a></li>
+        <li><a ui-sref="submit" class="nav-button">Submit</a></li>
+        <li id="title" class="nav-button"><a>RehJeks</a></li>
         <li ng-click="showDropdown = !showDropdown" class="login-button">
           <a ng-if="!loggedIn" ui-sref=".login">Login</a>
           <a ng-if="loggedIn" ui-sref=".useroptions">{{username}}</a>
         </li>
-        <li class="login-button"><a ng-click="loggedIn = !loggedIn">Fake Cheaty Login Button</a></li>
     </ul>
 </nav>
-
-<div ui-view ng-if="showDropdown" class="login-box"></div>
+<div ui-view ng-if="showDropdown" class="login-box fade fade-medium"></div>

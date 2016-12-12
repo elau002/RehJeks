@@ -8,7 +8,7 @@
 window.GlobalUser = {};
 window.GlobalUser.username = '';
 window.GlobalUser.userId = '';
-window.GlobalUser.solvedChallenges = ['X12X', 'Y14Y'];
+window.GlobalUser.solvedChallenges = [];
 
 var exampleChallengeList = [
   {
@@ -44,7 +44,10 @@ var exampleChallengeList = [
 
 //var serverUrl = 'http://localhost:8000'; //Update me with Process.Env.Port?
 
-angular.module('rehjeks.factories', [])
+angular.module('rehjeks.factories', [
+  'ngCookies',
+  'ngSanitize'
+])
 .factory('Auth', function($http, $location, $window) {
 
   var serverURL = $location.protocol() + '://' + location.host;
@@ -57,17 +60,14 @@ angular.module('rehjeks.factories', [])
     })
     .then(
       function(successRes) { //first param = successCallback
-        console.log(successRes.data.username);
         window.GlobalUser.username = successRes.data.username;
         window.GlobalUser.userId = successRes.data.userid;
         document.cookie = `username=${successRes.data.username}; userId=${successRes.data.userid};`;
         $scope.loggedin = true;
-        $scope.showDropdown = false; // Doesn't seem to work yet
         return true;
       },
       function(errorRes) { //second param = errorCallback
         console.log(errorRes);
-
       }
     );
   };
@@ -78,7 +78,7 @@ angular.module('rehjeks.factories', [])
       method: 'GET',
       url: serverUrl + '/logout'
     })
-    .then(result => console.log('logged out response from serverside'));
+    .then(result => console.log('logged out response from back-end'));
 
   };
 
@@ -89,19 +89,20 @@ angular.module('rehjeks.factories', [])
 
 
 })
-.factory('Server', function($http, $location) {
+.factory('Server', function($http, $location, $cookies, $sanitize) {
 
   var serverURL = $location.protocol() + '://' + location.host;
   //shared acces for Challenges and Solve Controller
   var currentChallenge = {data: undefined};
 
-  var getRandom = function($scope, difficulty) {
+  var getRandom = function($scope) {
 
-    var username = window.GlobalUser.username;
+    var difficulty = $scope.difficulty;
+    var username = $cookies.get('username');
     var solvedChallenges = window.GlobalUser.solvedChallenges;
+    // var solvedChallenges = window.GlobalUser.solvedChallenges;
 
-    var params = {username, solvedChallenges, difficulty};
-    console.log('params req is ', params);
+    var params = username ? {username, difficulty} : {difficulty, solvedChallenges};
 
     return $http({
       method: 'GET',
@@ -111,7 +112,6 @@ angular.module('rehjeks.factories', [])
     })
     .then(
       function(returnedChallenge) { //first param = successCallback
-        console.log('getRandom Returned this form server: ', returnedChallenge);
 
         //pass challenge to proper scope to display
         $scope.challengeData = returnedChallenge.data;
@@ -130,25 +130,16 @@ angular.module('rehjeks.factories', [])
   };
 
 
-  var getAllChallenges = function($scope, difficulty) {
-
-    console.log('trying to get all Challenges from __', $location.path());
+  var getAllChallenges = function($scope, difficulty, quantity) {
 
     $http({
       method: 'GET',
       url: serverURL + '/challenges',
-      params: {difficulty}
+      params: {difficulty, quantity}
     })
     .then(
       function(returnedData) { //first param = successCallback
-        console.log('getRandom Returned this form server: ', returnedData);
-
-        //$scope.challengeList = returnedData.data;
-        //  OR
-        //$scope.challengeList = returnedData;
-        console.log(returnedData);
         $scope.challengeList = returnedData.data;
-
       })
     .catch(
       function(errorRes) { //second param = errorCallback
@@ -185,8 +176,7 @@ angular.module('rehjeks.factories', [])
 
     var submission = {
       solution: solution,
-      username: window.GlobalUser.username,
-      userId: window.GlobalUser.userId,
+      username: $cookies.get('username'),
       challengeId: challengeId,
       timeToSolve: timeToSolve
     };
@@ -199,6 +189,31 @@ angular.module('rehjeks.factories', [])
 
   };
 
+  var submitNewChallenge = function($scope) {
+    // Creating new challenge by user
+
+    let {submitData:{title, prompt, text, difficulty, expected, answer, cheats}} = $scope;
+
+    text = $sanitize(text);
+
+    let submitData = {
+      username: $cookies.get('username'),
+      title: title,
+      prompt: prompt,
+      text: text,
+      difficulty: difficulty,
+      expected: expected(),
+      answer: answer,
+      cheats: cheats
+    };
+
+    return $http({
+      method: 'POST',
+      url: serverURL + '/challenge',
+      data: JSON.stringify(submitData)
+    });
+
+  };
   ///////////////////////////
   //    Factory Interface  //
   ///////////////////////////
@@ -209,7 +224,23 @@ angular.module('rehjeks.factories', [])
     getRandom: getRandom,
     getChallenge: getChallenge,
     currentChallenge: currentChallenge,
-    submitUserSolution: submitUserSolution
+    submitUserSolution: submitUserSolution,
+    submitNewChallenge: submitNewChallenge
   };
 
+})
+.factory('RegexParser', function() {
+
+  var regexBody = /[^\/].*(?=\/[gim]{0,3}$)/;
+  var regexFlags = /[gim]{0,3}$/;
+
+  var makeRegex = function(regexStr) {
+    var attemptBody = regexStr.match(regexBody);
+    var attemptFlags = regexStr.match(regexFlags);
+
+    // Create new regex object
+    return new RegExp(attemptBody, attemptFlags);
+  };
+
+  return makeRegex;
 });
