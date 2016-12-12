@@ -27,6 +27,7 @@ angular.module('rehjeks.profile', [
     }
   });
 
+
   // Get the challenges the user has solved
   $scope.getUserChallenges = function() {
   	return Server.getUserChallenges($scope);
