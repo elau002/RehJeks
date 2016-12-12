@@ -8,6 +8,7 @@ angular.module('rehjeks.profile', [
     if (!$cookies.get('username')) {
       $location.path('/solve');
     }
+  
     $scope.user = {};
     $scope.user.difficulties = {};
     $scope.user.challenges = [];
