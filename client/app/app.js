@@ -13,6 +13,8 @@ angular.module('rehjeks', [
   'ui.router'
 ])
 
+//App controller which is used to check if user is authorized to access next page
+
 .controller('appController', function($scope, $location){
   $scope.$on('$stateChangeStart', function(event, newUrl){
     if(newUrl.requireAuth && document.cookie === ""){
@@ -22,7 +24,9 @@ angular.module('rehjeks', [
   })
 })
 
-.config(function($stateProvider, $urlRouterProvider, $httpProvider, $momentProvider){
+//UI router config with associated login and useroptions states for each page
+
+.config(function($stateProvider, $urlRouterProvider, $httpProvider){
 
   $urlRouterProvider.otherwise('/solve');
 

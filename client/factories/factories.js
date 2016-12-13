@@ -23,6 +23,9 @@ angular.module('rehjeks.factories', [
 
   var serverURL = $location.protocol() + '://' + location.host;
 
+  //Authorize method used to authenticate user when logging in or signing up
+  //Cookie is stored in document.cookie with username and userId info
+
   var authorize = function( {username, password}, route, $scope) {
     return $http({
       method: 'POST',
@@ -40,6 +43,9 @@ angular.module('rehjeks.factories', [
       }
     );
   };
+
+  /*Logout method used to logout user by sending a GET request to the server
+    where the session is destroyed */
 
   var logout = function() {
 
@@ -64,6 +70,10 @@ angular.module('rehjeks.factories', [
   var serverURL = $location.protocol() + '://' + location.host;
   //shared acces for Challenges and Solve Controller
   var currentChallenge = {data: undefined};
+
+  //Gets a random challenge by sending a request to the server
+  //Queries on username stored in cookies in order to get a challenge 
+  //not already solved by user
 
   var getRandom = function($scope) {
 
@@ -99,6 +109,7 @@ angular.module('rehjeks.factories', [
 
   };
 
+  //Gets all challenges
 
   var getAllChallenges = function($scope, difficulty, quantity) {
 
@@ -118,6 +129,7 @@ angular.module('rehjeks.factories', [
 
   };
 
+  //Gets all User challenges by sending a GET request to server and querying by username
 
   var getUserChallenges = function($scope, username) {
     // Getting user specific challenges to display on profile
@@ -132,14 +144,16 @@ angular.module('rehjeks.factories', [
     });
   };
 
+  //SETs currentChallengeData to returned Data
+
   var getChallenge = function(challenge) {
 
-        //SET currentChallengeData to returned Data
     currentChallenge.data = challenge;
     $location.path('solve');
 
   };
 
+  //Sends a POST request to server in order to verify if user submitted solution is valid  
 
   var submitUserSolution = function(solution, challengeId, timeToSolve) {
 
@@ -158,8 +172,9 @@ angular.module('rehjeks.factories', [
 
   };
 
+  // Creating new challenge by user
+
   var submitNewChallenge = function($scope) {
-    // Creating new challenge by user
 
     let {submitData:{title, prompt, text, difficulty, expected, answer, cheats}} = $scope;
 
