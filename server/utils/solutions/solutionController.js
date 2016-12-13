@@ -10,14 +10,17 @@ module.exports.getOtherSolutions = function(req, res) {
   let {query: {username, userId, challengeId, quantity = 10}} = req;
 
   if (challengeId) {
-    console.log("challengeId: ", challengeId);
-    Solution.find({challengeId: challengeId}).limit(+quantity)
-    .then(data => {console.log("solutions: ", data); res.send(data)})
+    // Find all solutions for a given challenge
+    Solution.find({challengeId: challengeId})
+    // Maximum [quantity] results, default value is 10
+    .limit(+quantity)
+    .then(data => res.send(data))
     .catch(err => { res.sendStatus(500); console.log(err); });
 
   } else {
-
+    // Find user by username
     User.findOne(userId ? {id: userId} : {username: username})
+    // Find all solutions for said user
     .then(user => Solution.find({userId: user ? user.id : "undefined"}).limit(+quantity))
     .then(data => res.send(data))
     .catch(err => { res.sendStatus(500); console.log(err); });
@@ -26,7 +29,7 @@ module.exports.getOtherSolutions = function(req, res) {
 };
 
 module.exports.addUserSolution = function(req, res) {
-  // Adds a (correct) solution to the database.
+  // Adds a (correct) solution to the database. If user not logged in, records "anonymous" as their userId.
 
   let {body: {userId, username, challengeId, solution, timeToSolve}} = req;
 
@@ -37,8 +40,7 @@ module.exports.addUserSolution = function(req, res) {
     solution: solution,
     timeToSolve: timeToSolve
   }))
-  // .then(data => console.log(data))
-  .then(something => res.send(200))
+  .then(result => res.send(200))
   .catch(err => { res.sendStatus(500); console.log(err); });
 
 };
