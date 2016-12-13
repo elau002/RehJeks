@@ -3,23 +3,24 @@ var User = require('./userModel');
 var Solution = require('../solutions/solutionModel');
 var passport = require('passport');
 
-module.exports.getSolvedChallenges = function(req, res, next) {
-  // Send username via request from front end to get userID
-  var user = req.query.username;
-
-  User.findOne({username: user})
-  .then(function(user) {
-    return Solution.find({userId: user.id});
-  })
-  .then(function(solutions) {
-    if (solutions) {
-      console.log('got solutions');
-      res.json(solutions);
-    } else {
-      next(new Error('user does not have any solutions to display'));
-    }
-  });
-};
+// Note: this code is deprecated
+// module.exports.getSolvedChallenges = function(req, res, next) {
+//   // Send username via request from front end to get userID
+//   var user = req.query.username;
+//
+//   User.findOne({username: user})
+//   .then(function(user) {
+//     return Solution.find({userId: user.id});
+//   })
+//   .then(function(solutions) {
+//     if (solutions) {
+//       console.log('got solutions');
+//       res.json(solutions);
+//     } else {
+//       next(new Error('user does not have any solutions to display'));
+//     }
+//   });
+// };
 
 
 module.exports.signup = function(req, res, next) {

@@ -11,7 +11,8 @@ angular.module('rehjeks.solve', [
 
   var challStartTime = new Date();
 
-
+  // Increment timer. This is called on an $interval towards the end of this controller module.
+  // Also used to trigger the "Just Start Typing" hint.
   var updateTimer = function(startTime) {
     var now = new Date();
     var secondsElapsed = Math.floor( (now - startTime) / 1000 );
@@ -22,6 +23,14 @@ angular.module('rehjeks.solve', [
     }
   };
 
+  // Logic to show "Just Start Typing" hint
+  // The idea is only to show this to help new users, so if:
+  //   -the user is logged in
+  //   -the user has begun Typing
+  //   -the user has completed two or more challenges
+  //   -it's been ten seconds since the start of the problem
+        // => don't show the hint
+  // Otherwise, show the hint after a second if the user doesn't get the idea
   var decideToShowTypingHint = function() {
     if (window.GlobalUser.solvedChallenges.length > 1
       || $cookies.get('username')
@@ -172,7 +181,7 @@ angular.module('rehjeks.solve', [
     $scope.getRandom()
   }
 
-  // Start Timer
+  // Start Timer!
   var solutionClock = $interval(function() {
     updateTimer(challStartTime);
   }, 1000);
@@ -191,6 +200,7 @@ angular.module('rehjeks.solve', [
   };
 });
 
+// Check if actual match array matches expected match array
 var solutionsMatch = function(arr1, arr2) {
     if (!arr2 || !arr1) {
       return false;

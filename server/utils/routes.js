@@ -14,8 +14,6 @@ module.exports = function (app, express) {
 
   app.get('/solution', solutionController.getOtherSolutions);
 
-  app.get('/user', userController.getSolvedChallenges);
-
   app.get('/logout', userController.logout);
 
   ////////////////
@@ -28,6 +26,7 @@ module.exports = function (app, express) {
     res.json({message: 'Success', username: req.user.username, userid: req.user.id});
   });
 
+  // We store the solution when someone solves a challenge
   app.post('/solution', solutionController.addUserSolution);
 
   app.post('/challenge', challengeController.submitNewChallenge);
