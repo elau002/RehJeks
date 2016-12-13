@@ -386,7 +386,9 @@ nav a:focus {
 }
 
 .stats-title {
-  margin-left: 20px;
+  margin: 20px;
+  padding-top: 15px;
+  color: #777;
 }
 
 .stats-breakdown {
