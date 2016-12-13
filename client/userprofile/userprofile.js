@@ -25,6 +25,7 @@ angular.module('rehjeks.profile', [
     }
   });
 
+
   $scope.getUserChallenges = function() {
   	return Server.getUserChallenges($scope, $cookies.get('username'));
   };
