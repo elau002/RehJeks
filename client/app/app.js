@@ -24,12 +24,16 @@ angular.module('rehjeks', [
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $momentProvider){
 
+  // redirect to /solve if any unrecognized paths are loaded
   $urlRouterProvider.otherwise('/solve');
 
+  // this is just setup for angular-momentjs for relative time display
   $momentProvider
   .asyncLoading(false)
   .scriptUrl('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js');
 
+  // ui-router uses states instead of URLs to determine views. Here we have associated a
+  // URL with each state but it's not necessary.
   $stateProvider
   .state('solve', {
     url: '/solve',
@@ -44,6 +48,11 @@ angular.module('rehjeks', [
       }
     }
   })
+  // Each state has nested states for both "login" and "useroptions,"" which determines which
+  // view/window will be displayed when the user clicks the rightmost button on the navbar.
+  // If the user isn't logged in, the state is "login" to allow them to log in when they press the button.
+  // If they are logged in, the state is "useroptions" to display a little menu to go to their profile
+  // or to log them out.
   .state('solve.login', {
     templateUrl: 'login/login.html',
     controller: 'LoginController',
@@ -55,9 +64,6 @@ angular.module('rehjeks', [
     parent: 'solve',
     requireAuth: true
   })
-
-
-
 
 
   .state('challenges', {
@@ -85,6 +91,7 @@ angular.module('rehjeks', [
     requireAuth: true
   })
 
+
   .state('submit', {
     url: '/submit',
     views: {
@@ -109,6 +116,7 @@ angular.module('rehjeks', [
     parent: 'submit',
     requireAuth: true
   })
+
 
   .state('profile', {
     url: '/profile',
