@@ -14,6 +14,8 @@ var db = mongoose.connect(localDb);
 
 // run this command in terminal from root directory to fetch data:   node server/utils/challenges/challengesStubs.js
 
+// If you would like to add challenges, make sure they have IDs. If you add challenges through the website,
+// it will generate unique IDs for you. Not so with the stub file, and that can cause problems.
 var challengeArray = [
   {
     'id': '1',

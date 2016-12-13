@@ -17,6 +17,8 @@ var challengeSchema = mongoose.Schema({
   timestamps: true
 });
 
+// Note: this only seems to generate IDs through the server, not our stub file.
+// If you are going to add challenges in the stub file, make sure they have IDs.
 challengeSchema.pre('save', function(next) {
   if (!this.id) {
     this.id = shortid.generate();
