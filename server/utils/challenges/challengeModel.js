@@ -13,9 +13,9 @@ var challengeSchema = mongoose.Schema({
   answer: String,
   cheats: [String]
 },
-{
-  timestamps: true
-});
+  {
+    timestamps: true
+  }); 
 
 // Note: this only seems to generate IDs through the server, not our stub file.
 // If you are going to add challenges in the stub file, make sure they have IDs.
@@ -27,3 +27,4 @@ challengeSchema.pre('save', function(next) {
 });
 
 module.exports = mongoose.model('Challenge', challengeSchema);
+ 

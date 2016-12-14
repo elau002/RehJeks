@@ -1,7 +1,7 @@
 
 var mongoose = require('mongoose');
 var Challenge = require('./challengeModel');
-var Solution = require('./../solutions/solutionModel')
+var Solution = require('./../solutions/solutionModel');
 
 
 var localDb = 'mongodb://127.0.0.1:27017/rehjeks';
@@ -47,7 +47,7 @@ var challengeArray = [
     'answer': '/\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])/',
     'cheats': ['']
   },
-  {
+  { 
     'id': '4',
     'title': 'Intersection',
     'prompt': 'A 6+ letter password with at least: one number, one letter and a symbol',
@@ -141,7 +141,7 @@ var challengeArray = [
 
 
 Challenge.remove({}, function(err, data) { return; });
-Solution.remove({}, function(err, data) {return; });
+Solution.remove({}, function(err, data) { return; });
 
 Challenge.collection.insertMany(challengeArray, function(err, row) {
   if (err) {

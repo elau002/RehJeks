@@ -44,7 +44,7 @@ module.exports.getChallenges = function(req, res) {
     .limit(+quantity)
     .then(data => res.send(data));
   }
-
+ 
 
 };
 
