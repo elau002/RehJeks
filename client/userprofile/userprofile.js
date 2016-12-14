@@ -60,11 +60,11 @@ angular.module('rehjeks.profile', [
     // Assign point value!
     let {user: {difficulties: {easy, medium, hard}}} = $scope;
     $scope.user.points = (
-      hard * 3
-      + medium * 2
+      hard * 5
+      + medium * 3
       + easy * 1
     );
-
+    // Vs Score 
   });
 
 });
