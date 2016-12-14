@@ -11,7 +11,7 @@ angular.module('rehjeks.challenges', [])
     Server.getChallenge(challenge);
   };
 
-
+ 
 
 
   $scope.getAllChallenges = function() {
