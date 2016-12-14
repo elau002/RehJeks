@@ -63,7 +63,106 @@ angular.module('rehjeks.factories', [
 
   return {
     authorize: authorize,
-    logout: logout
+    logout: logout,
+  };
+})
+
+//join queue
+  //gets sent message of channel to join
+    //subscribe to author of messages channel
+    //leave queue
+  //if no message sent, then listening for new presence
+  //on new presence, 
+    //send message containing your username and their username
+    //subscribe to new partners channel
+    //leave queue
+
+
+//require auth/being signed in
+//figure out how to access currently logged in user
+.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub) {
+  //subscribe to a channel
+  var subscribe = function(channelNameArray) {
+    //subscribe with given channel, with presence true
+    Pubnub.subscribe({
+      channels: channelNameArray, 
+      withPresence: true
+    });
+  };
+
+  //publish to channel
+  var publish = function(message, channel) {
+    //publish to given channel, with given message
+    Pubnub.publish({
+      message: message, 
+      channel: channel
+    });
+  };
+
+  //unsubscribe to channel
+  var unsubscribe = function(unsubArray) {
+    //unsubscribe to given channel
+    Pubnub.unsubscribe({channels: unsubArray});
+  };
+
+  //store current partner in competition
+  var partner = '';
+
+  //define function to invite a  user to chat
+  var inviteUserInQueue = function(otherUser) {  
+                        //dont know if this works, may need to require in a factory that has access to current user
+    publish([otherUser, $cookies.get('username')], 'queue');
+  };
+  
+  //initialize with uid of the currently logged in user
+  //includes .once function, so will need to be re-intialized for every new queueing 
+  var initPubnub = function() {
+    Pubnub.init({
+      subscribeKey: 'pub-c-97dbae08-7b07-4052-b8e0-aa255720ea8a',
+      publishKey: 'sub-c-794b9810-b865-11e6-a856-0619f8945a4f',
+            //dont know if this works, may need to require in a factory that has access to current user
+      uuid: $cookies.get('username'), 
+      ssl: true,
+    });
+    //add listeners
+    Pubnub.addListener({
+    //on new presence
+      presence: function(p) {
+      //if someone joins the queue channel
+        if (p.action === 'join' && p.channel === 'queue') {
+        //if no partner
+          if (!partner) { 
+          //send message to queue channel with our username and new presences username
+            inviteUserInQueue(p.uuid);
+          //subscribe to new users channel
+            subscribe([p.uuid]);
+          //unsub from queue
+            unsubscribe(['queue']);
+          }  
+        }
+      },
+    //on message receive,
+      message: function(m) {
+      //if message from queue 
+        if (m.channel === 'queue') {
+        //if contains username, 
+                             //dont know if this works, may need to require in a factory that has access to current user
+          if (m.message[0] === $cookies.get('username')) {
+          //subscribe to other persons channel
+            subscribe([m.message[1]]);
+          //unsub from queue  
+            unsubscribe(['queue']);
+          }
+        }
+      }
+    });      
+  };
+
+  return {
+    initPubnub: initPubnub,
+    subscribe: subscribe,
+    unsubscribe: unsubscribe,
+    publish: publish
   };
 
 
@@ -187,7 +286,7 @@ angular.module('rehjeks.factories', [
 
   var submitNewChallenge = function($scope) {
 
-    let {submitData:{title, prompt, text, difficulty, expected, answer, cheats}} = $scope;
+    let {submitData: {title, prompt, text, difficulty, expected, answer, cheats}} = $scope;
 
     text = $sanitize(text);
 
@@ -220,7 +319,7 @@ angular.module('rehjeks.factories', [
       params: {challengeId: id, quantity: 5}
     });
 
-  }
+  };
   ///////////////////////////
   //    Factory Interface  //
   ///////////////////////////
