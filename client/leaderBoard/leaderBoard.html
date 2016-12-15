@@ -9,7 +9,7 @@
         <th>Loses</th>
         <th>Rating</th>
       </tr>
-      <tr ng-repeat="user in leaders | orderBy:'score' | limitTo:10" >
+      <tr ng-repeat="user in leaders | limitTo:10" >
         <td>{{$index + 1}}</td>
         <td>{{user.username}}</td>
         <td>{{user.wins}}</td>
@@ -29,8 +29,8 @@
           <th>Loses</th>
           <th>Rating</th>
         </tr>
-        <tr ng-repeat="user in filteredleaders | orderBy: 'score'  ">
-          <td> {{user.index +1 }} </td>
+        <tr ng-repeat="user in filteredleaders ">
+          <td> {{user.index + 1 }} </td>
           <td ng-show="findUser(user.username)" ng-bind-html="highlightedText">{{user.username}}</td>
           <td ng-hide="findUser(user.username)">{{user.username}}</td>
           <td>{{user.wins}}</td>
