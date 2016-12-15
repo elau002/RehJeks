@@ -217,6 +217,33 @@ angular.module('rehjeks.factories', [
 
   };
 
+  var getUsers = function($scope) {
+    return $http({
+      method:'GET',
+      url: serverURL + '/leaderboard',
+    })
+    .then(function(allUsers) {
+      $scope.leaders = allUsers.data;
+    })
+    .catch(function(err){
+      console.log(err)
+    })
+  };
+
+  var getSingleUser = function($scope) {
+    return $http({
+      method:'GET',
+      url: serverURL + '/user',
+      params: {username: $cookies.get('username')}
+    })
+    .then(function(user) {
+      $scope.score = user.data.score;
+    })
+    .catch(function(err){
+      console.log(err)
+    })
+  };
+
   //Gets all challenges
 
   var getAllChallenges = function($scope, difficulty, quantity) {
@@ -262,6 +289,7 @@ angular.module('rehjeks.factories', [
     $location.path('solve');
 
   };
+
 
   //Sends a POST request to server in order to verify if user submitted solution is valid  
 
@@ -329,6 +357,8 @@ angular.module('rehjeks.factories', [
     getUserChallenges: getUserChallenges,
     getRandom: getRandom,
     getChallenge: getChallenge,
+    getUsers: getUsers,
+    getSingleUser: getSingleUser,
     currentChallenge: currentChallenge,
     submitUserSolution: submitUserSolution,
     submitNewChallenge: submitNewChallenge,
