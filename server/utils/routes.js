@@ -12,6 +12,8 @@ module.exports = function (app, express) {
 
   app.get('/challenges', challengeController.getChallenges);
 
+  app.get('/vschallenge', challengeController.fetchRandomChallenge)
+
   app.get('/solution', solutionController.getOtherSolutions);
 
   app.get('/logout', userController.logout);

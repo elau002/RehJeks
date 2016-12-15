@@ -103,7 +103,7 @@ angular.module('rehjeks.factories', [
 
   //unsubscribe to channel
   var unsubscribe = function(unsubArray) {
-    //unsubscribe to given channel
+    //unsubscribe to given channel 
     Pubnub.unsubscribe({channels: unsubArray});
   };
 
@@ -271,7 +271,6 @@ angular.module('rehjeks.factories', [
 
   var getUserChallenges = function($scope) {
     // Getting user specific challenges to display on profile
-
     return $http({
       method: 'GET',
       url: serverURL + '/challenges',
@@ -282,6 +281,18 @@ angular.module('rehjeks.factories', [
       $scope.user.challenges = challenges.data;
     });
   };
+
+  var fetchRandomQuestion = function($scope) {
+    return $http({
+      method: 'GET',
+      url: serverURL + '/vschallenge',
+      paramSerializer: '$httpParamSerializerJQLike'
+    })
+    .then(function(challenges) {
+      //will need to set these challenges for both users, when communication is established
+      console.log(challenges);
+    })
+  } 
 
   //SETs currentChallengeData to returned Data
 
@@ -360,6 +371,7 @@ angular.module('rehjeks.factories', [
     getUserChallenges: getUserChallenges,
     getRandom: getRandom,
     getChallenge: getChallenge,
+    fetchRandomQuestion: fetchRandomQuestion,
     getUsers: getUsers,
     getSingleUser: getSingleUser,
     currentChallenge: currentChallenge,

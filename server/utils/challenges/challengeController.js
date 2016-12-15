@@ -203,3 +203,28 @@ module.exports.submitNewChallenge = function(req, res) {
   });
 
 };
+
+// Get random question 
+module.exports.fetchRandomChallenge = function(req, res) {
+  var count;
+  Challenge.count({}, function( err, num) {
+    count = num;
+  })
+  .then(Challenge.find({}, function(err, challenge) {
+      if(err) {
+        res.status(500).send(err);
+      }
+      var index = Math.floor(Math.random() * count);
+      res.send(challenge[index]);
+    })
+  )
+}
+  //different from current grab random question, this has no restrictions
+  
+  // query the database for challenge collection and get total count
+
+  // after the total amount of questions is known,
+
+    // query the database for a challenge by use of 
+    // Math.ceil(math.random * count of collection);
+      // resend back the challenge it found
