@@ -96,8 +96,6 @@ angular.module('rehjeks.factories', [
     Pubnub.publish({
       message: message, 
       channel: channel
-    }, function(status, res) {
-      console.log(res);
     });
   };
 
@@ -119,7 +117,6 @@ angular.module('rehjeks.factories', [
   //initialize with uid of the currently logged in user
   //includes .once function, so will need to be re-intialized for every new queueing
   var initPubnub = function() {
-    
     Pubnub.init({
       subscribeKey: 'sub-c-c95e1814-c251-11e6-b38f-02ee2ddab7fe',
       publishKey: 'pub-c-6d77ac1d-8da3-4140-9a9a-c0da9b0c0bf9',
@@ -131,7 +128,6 @@ angular.module('rehjeks.factories', [
     Pubnub.addListener({
     //on new presence
       presence: function(p) {
-        console.log(p);
       //if someone joins the queue channel
         if (p.action === 'join' && p.channel === 'queue') {
         //if no partner
@@ -147,7 +143,6 @@ angular.module('rehjeks.factories', [
       },
     //on message receive,
       message: function(m) {
-        console.log(m);
       //if message from queue 
         if (m.channel === 'queue') {
         //if contains username, 
