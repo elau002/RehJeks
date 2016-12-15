@@ -148,6 +148,7 @@ angular.module('rehjeks', [
         requireAuth: true
       })
 
+<<<<<<< HEAD
       .state('profile', {
         url: '/profile',
         requireAuth: true,
