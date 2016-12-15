@@ -44,10 +44,17 @@ module.exports.logout = function(req, res, next) {
 };
 
 module.exports.getUsers = function(req, res) {
-  console.log('hello');
   User.find(function(err, user){
     if(err) { res.status(500).send(err)}
-    console.log(user);
+    res.send(user);
+  })
+};
+
+module.exports.getSingleUser = function(req, res) {
+  User.findOne(req.query, function (err, user) {
+    if(err) {
+      res.status(500).send(err);
+    }
     res.send(user);
   })
 }
