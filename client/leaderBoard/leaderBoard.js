@@ -14,7 +14,7 @@ angular.module('rehjeks.leaderboard', [
           var counter = 0;
          //after the promise is returned, sort by user's score
           $scope.leaders.sort(function (a, b) {
-            return a.score - b.score;
+            return b.score - a.score;
           }).forEach(function (item) {
           //create an index key equal to the counter to keep track of position in array
             item.index = counter;

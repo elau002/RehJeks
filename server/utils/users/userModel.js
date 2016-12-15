@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
   pw: String,
   wins: {type: Number, default: 0 },
   loses: {type: Number, default: 0 },
-  score: {type: Number, default: 0}
+  score: {type: Number, default: 50}
 },
 {
   timestamps: true
