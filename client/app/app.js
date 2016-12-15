@@ -160,16 +160,16 @@ angular.module('rehjeks', [
           }
         }
       })
-    // .state('leaderBoard.login', {
-    //   templateUrl: 'login/login.html',
-    //   controller: 'LoginController',
-    //   parent: 'leaderBoard'
-    // })
-    // .state('leaderBoard.useroptions', {
-    //   templateUrl: 'useroptions/useroptions.html',
-    //   controller: 'UserOptionsController',
-    //   parent: 'leaderBoard'
-    // })
+      .state('leaderboard.login', {
+        templateUrl: 'login/login.html',
+        controller: 'LoginController',
+        parent: 'leaderboard'
+      })
+      .state('leaderboard.useroptions', {
+        templateUrl: 'useroptions/useroptions.html',
+        controller: 'UserOptionsController',
+        parent: 'leaderboard'
+      })
   })
   // Workaround for "unhandled rejection" inherent to Angular 1.6.0 with ui-router
   .config(['$qProvider', function ($qProvider) {

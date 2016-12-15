@@ -13,7 +13,8 @@ angular.module('rehjeks.profile', [
     },
     challenges: [], // Where to store the challenge/solution object tuples when we fetch them
     points: 0,
-    show: false
+    show: false,
+    score: 0
   };
 
   $scope.formatTime = function(timeStr) {
@@ -27,6 +28,9 @@ angular.module('rehjeks.profile', [
     }
   });
 
+  $scope.getSingleUser = function () {
+    return Server.getSingleUser($scope);
+  }
   // Get the challenges the user has solved
 
   $scope.getUserChallenges = function() {
@@ -64,7 +68,6 @@ angular.module('rehjeks.profile', [
       + medium * 3
       + easy * 1
     );
-    // Vs Score 
   });
-
+  $scope.getSingleUser()
 });
