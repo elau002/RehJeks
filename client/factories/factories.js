@@ -115,11 +115,11 @@ angular.module('rehjeks.factories', [
   };
   
   //initialize with uid of the currently logged in user
-  //includes .once function, so will need to be re-intialized for every new queueing 
+  //includes .once function, so will need to be re-intialized for every new queueing
   var initPubnub = function() {
     Pubnub.init({
-      subscribeKey: 'pub-c-97dbae08-7b07-4052-b8e0-aa255720ea8a',
-      publishKey: 'sub-c-794b9810-b865-11e6-a856-0619f8945a4f',
+      subscribeKey: 'sub-c-c95e1814-c251-11e6-b38f-02ee2ddab7fe',
+      publishKey: 'pub-c-6d77ac1d-8da3-4140-9a9a-c0da9b0c0bf9',
             //dont know if this works, may need to require in a factory that has access to current user
       uuid: $cookies.get('username'), 
       ssl: true,
