@@ -1,8 +1,42 @@
 <div id="leaderboard">
   <h3> Leaderboard</h3>
   <div ng-init="getUsers()" ng-model="leaders">
-    <div ng-repeat="user in leaders">
-      <div>{{user.username}}</div>
-    </div>
+    <table>
+      <tr>
+        <th>Ranking</th>
+        <th>User</th>
+        <th>Wins</th>
+        <th>Loses</th>
+        <th>Rating</th>
+      </tr>
+      <tr ng-repeat="user in leaders | orderBy:'score' | limitTo:listLimit" >
+        <td>{{$index + 1}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.wins}}</td>
+        <td>{{user.loses}}</td>
+        <td>{{user.score}}</td>
+      </tr>
+    </table>
+    
   </div>
-</div>  
+  <div ng-if="username">
+    <h3> Your Location</h3>
+      <table>
+        <tr>
+          <th>Ranking</th>
+          <th>User</th>
+          <th>Wins</th>
+          <th>Loses</th>
+          <th>Rating</th>
+        </tr>
+        <tr ng-repeat="user in leaders | orderBy:'score' | limitTo:listLimit">
+          <td>{{$index + 1}}</td>
+          <td ng-show="findUser(user.username)" ng-bind-html="highlightedText">{{user.username}}</td>
+          <td ng-hide="findUser(user.username)">{{user.username}}</td>
+          <td>{{user.wins}}</td>
+          <td>{{user.loses}}</td>
+          <td>{{user.score}}</td>
+        </tr>
+      </table>
+  </div>
+  </div>
