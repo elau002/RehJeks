@@ -135,7 +135,38 @@ var challengeArray = [
     'difficulty': 'medium',
     'expected': ['I', 'have', 'the', 'best', 'words'],
     'cheats': ['']
-  }
+  },
+  {
+    'id': '13',
+    'title': 'Date Format',
+    'prompt': "Match a date that follows the following standard",
+    'text':  '314531-150-5412',
+    'difficulty': 'medium',
+    'expected': ['1453-15-12'],
+    'answer': '\d{4}\-\d{2}\-\d{2}',
+    'cheats': ['']
+  },
+  {
+    'id': '14',
+    'title': 'SSN Format',
+    'prompt': "Match a traditional SSN",
+    'text':  '511246-87723-43.1.23',
+    'difficulty': 'medium',
+    'expected': ['546-23-4323'],
+    'answer': '\d{3}\-\d{2}\-\d{4}',
+    'cheats': ['']
+  },
+  {
+    'id': '15',
+    'title': 'IPV4 Format',
+    'prompt': "Match an IPv4 address",
+    'text':  '127.0aa.0a0.112b',
+    'difficulty': 'medium',
+    'expected': ['127.0.0.1'],
+    'answer': '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
+    'cheats': ['']
+  },
+  
 
 ];
 
