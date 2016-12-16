@@ -19,8 +19,8 @@ angular.module('rehjeks.useroptions', [
     $location.path('/profile');
   };
   
-  $scope.getSingleUser = function() {
-    return Server.getSingleUser();
+  $scope.getSingleUser = function($scope) {
+    return Server.getSingleUser($scope)
   }
   // Get challenges solved by user in order to enumerate points
   Server.getUserChallenges($scope, $cookies.get('username'))
@@ -32,6 +32,7 @@ angular.module('rehjeks.useroptions', [
     .reduce((a, b) => a + b);
     $scope.points = window.GlobalUser.points;
   });
-  ;
+
+  $scope.getSingleUser($scope);
 });
  
