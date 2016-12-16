@@ -28,7 +28,7 @@ angular.module('rehjeks.profile', [
     }
   });
 
-  $scope.getSingleUser = function () {
+  $scope.getSingleUser = function ($scope) {
     return Server.getSingleUser($scope);
   }
   // Get the challenges the user has solved
@@ -69,5 +69,6 @@ angular.module('rehjeks.profile', [
       + easy * 1
     );
   });
-  $scope.getSingleUser()
+
+  $scope.getSingleUser($scope)
 });

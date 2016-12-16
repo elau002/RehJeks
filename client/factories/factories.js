@@ -240,7 +240,7 @@ angular.module('rehjeks.factories', [
       params: {username: $cookies.get('username')}
     })
     .then(function(user) {
-      $scope.score = user.data.score;
+      $scope.user.score = user.data.score;
     })
     .catch(function(err) {
       console.log(err);
