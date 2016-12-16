@@ -36,8 +36,9 @@ angular.module('rehjeks.factories', [
       function(successRes) { //first param = successCallback
 
         // Set cookies if login successful!
+        console.log(successRes);
         document.cookie = `username=${successRes.data.username}; userId=${successRes.data.userid};`;
-
+        document.cookie = `userScore =${successRes.data.score};`
         // This will change the "Login" anchor tag in the navbar to your username
         $scope.loggedin = true;
         return true;
