@@ -86,8 +86,10 @@ angular.module('rehjeks.factories', [
     //subscribe with given channel, with presence true
     Pubnub.subscribe({
       channels: channelNameArray, 
-      withPresence: true
+      withPresence: true,
+      triggerEvents: true
     });
+    console.log('subscribed to channels ', channelNameArray);
   };
 
   //publish to channel
@@ -124,12 +126,13 @@ angular.module('rehjeks.factories', [
       uuid: $cookies.get('username'), 
       ssl: true,
     });
+    console.log('started Pubnub as ', Pubnub.getUUID());
     //add listeners
     Pubnub.addListener({
     //on new presence
       presence: function(p) {
       //if someone joins the queue channel
-        if (p.action === 'join' && p.channel === 'queue') {
+        if (p.action === 'join' && p.channel === 'queue' && p.uuid !== $cookies.get('username')) {
         //if no partner
           if (!partner) { 
           //send message to queue channel with our username and new presences username
@@ -170,7 +173,7 @@ angular.module('rehjeks.factories', [
 
 .factory('Server', function($http, $location, $cookies, $sanitize) {
 
-  var serverURL = $location.protocol() + '://' + location.host;
+  var serverURL = $location.protocol() + '://' + location.host; 
   //shared acces for Challenges and Solve Controller
   var currentChallenge = {data: undefined};
 
@@ -219,29 +222,29 @@ angular.module('rehjeks.factories', [
 
   var getUsers = function($scope) {
     return $http({
-      method:'GET',
+      method: 'GET',
       url: serverURL + '/leaderboard',
     })
     .then(function(allUsers) {
       $scope.leaders = allUsers.data;
     })
-    .catch(function(err){
-      console.log(err)
-    })
+    .catch(function(err) {
+      console.log(err);
+    });
   };
 
   var getSingleUser = function($scope) {
     return $http({
-      method:'GET',
+      method: 'GET',
       url: serverURL + '/user',
       params: {username: $cookies.get('username')}
     })
     .then(function(user) {
       $scope.score = user.data.score;
     })
-    .catch(function(err){
-      console.log(err)
-    })
+    .catch(function(err) {
+      console.log(err);
+    });
   };
 
   //Gets all challenges
