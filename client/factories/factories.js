@@ -233,20 +233,6 @@ angular.module('rehjeks.factories', [
     });
   };
 
-  var getSingleUser = function($scope) {
-    return $http({
-      method: 'GET',
-      url: serverURL + '/user',
-      params: {username: $cookies.get('username')}
-    })
-    .then(function(user) {
-      $scope.user.score = user.data.score;
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-  };
-
   //Gets all challenges
 
   var getAllChallenges = function($scope, difficulty, quantity) {
@@ -373,7 +359,6 @@ angular.module('rehjeks.factories', [
     getChallenge: getChallenge,
     fetchRandomQuestion: fetchRandomQuestion,
     getUsers: getUsers,
-    getSingleUser: getSingleUser,
     currentChallenge: currentChallenge,
     submitUserSolution: submitUserSolution,
     submitNewChallenge: submitNewChallenge,

@@ -50,11 +50,3 @@ module.exports.getUsers = function(req, res) {
   })
 };
 
-module.exports.getSingleUser = function(req, res) {
-  User.findOne(req.query, function (err, user) {
-    if(err) {
-      res.status(500).send(err);
-    }
-    res.send(user);
-  })
-}

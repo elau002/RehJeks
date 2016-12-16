@@ -19,8 +19,6 @@ module.exports = function (app, express) {
   app.get('/logout', userController.logout);
 
   app.get('/leaderboard', userController.getUsers);
-
-  app.get('/user', userController.getSingleUser);
   
   ////////////////
   // POST REQUESTS
