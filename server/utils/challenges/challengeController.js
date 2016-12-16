@@ -206,17 +206,13 @@ module.exports.submitNewChallenge = function(req, res) {
 
 // Get random question 
 module.exports.fetchRandomChallenge = function(req, res) {
-  var count;
-  Challenge.count({}, function( err, num) {
-    count = num;
-  })
-  .then(Challenge.find({}, function(err, challenge) {
+  Challenge.find({}, function(err, challenge) {
       if(err) {
         res.status(500).send(err);
       }
-      var index = Math.floor(Math.random() * count);
+      var index = Math.floor(Math.random() * challenge.length-1);
       res.send(challenge[index]);
-    })
+    }
   )
 }
   //different from current grab random question, this has no restrictions
