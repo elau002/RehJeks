@@ -80,7 +80,7 @@ angular.module('rehjeks.factories', [
 
 //require auth/being signed in
 //figure out how to access currently logged in user
-.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub, PUBLISH_KEY, SUBSCRIBE_KEY) {
+.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub) {
   //subscribe to a channel
   var subscribe = function(channelNameArray) {
     //subscribe with given channel, with presence true
@@ -120,8 +120,8 @@ angular.module('rehjeks.factories', [
   //includes .once function, so will need to be re-intialized for every new queueing
   var initPubnub = function() {
     Pubnub.init({
-      subscribeKey: SUBSCRIBE_KEY,
-      publishKey: PUBLISH_KEY,
+      subscribeKey: 'sub-c-c95e1814-c251-11e6-b38f-02ee2ddab7fe',
+      publishKey: 'pub-c-6d77ac1d-8da3-4140-9a9a-c0da9b0c0bf9',
             //dont know if this works, may need to require in a factory that has access to current user
       uuid: $cookies.get('username'), 
       ssl: true,
@@ -222,29 +222,29 @@ angular.module('rehjeks.factories', [
 
   var getUsers = function($scope) {
     return $http({
-      method:'GET',
+      method: 'GET',
       url: serverURL + '/leaderboard',
     })
     .then(function(allUsers) {
       $scope.leaders = allUsers.data;
     })
-    .catch(function(err){
-      console.log(err)
-    })
+    .catch(function(err) {
+      console.log(err);
+    });
   };
 
   var getSingleUser = function($scope) {
     return $http({
-      method:'GET',
+      method: 'GET',
       url: serverURL + '/user',
       params: {username: $cookies.get('username')}
     })
     .then(function(user) {
       $scope.score = user.data.score;
     })
-    .catch(function(err){
-      console.log(err)
-    })
+    .catch(function(err) {
+      console.log(err);
+    });
   };
 
   //Gets all challenges
