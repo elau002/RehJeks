@@ -56,6 +56,16 @@ angular.module('rehjeks.solve', [
   $scope.correctAttempt;
   $scope.otherSolutions = [];
   $scope.showAnswers = false;
+  //new scope variables
+  $scope.solved = false;
+  $scope.solvedLocal = false;
+
+  //faceoffmode variables
+
+  $scope.userScore;
+  $scope.opponentName;
+  $scope.opponentAttempt;
+  $scope.opponentScore;
 
 
 
