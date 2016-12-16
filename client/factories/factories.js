@@ -37,7 +37,7 @@ angular.module('rehjeks.factories', [
 
         // Set cookies if login successful!
         document.cookie = `username=${successRes.data.username}; userId=${successRes.data.userid};`;
-
+        document.cookie = `userScore =${successRes.data.score};`
         // This will change the "Login" anchor tag in the navbar to your username
         $scope.loggedin = true;
         return true;
@@ -103,7 +103,7 @@ angular.module('rehjeks.factories', [
 
   //unsubscribe to channel
   var unsubscribe = function(unsubArray) {
-    //unsubscribe to given channel
+    //unsubscribe to given channel 
     Pubnub.unsubscribe({channels: unsubArray});
   };
 
@@ -233,20 +233,6 @@ angular.module('rehjeks.factories', [
     });
   };
 
-  var getSingleUser = function($scope) {
-    return $http({
-      method: 'GET',
-      url: serverURL + '/user',
-      params: {username: $cookies.get('username')}
-    })
-    .then(function(user) {
-      $scope.score = user.data.score;
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-  };
-
   //Gets all challenges
 
   var getAllChallenges = function($scope, difficulty, quantity) {
@@ -271,7 +257,6 @@ angular.module('rehjeks.factories', [
 
   var getUserChallenges = function($scope) {
     // Getting user specific challenges to display on profile
-
     return $http({
       method: 'GET',
       url: serverURL + '/challenges',
@@ -282,6 +267,18 @@ angular.module('rehjeks.factories', [
       $scope.user.challenges = challenges.data;
     });
   };
+
+  var fetchRandomQuestion = function($scope) {
+    return $http({
+      method: 'GET',
+      url: serverURL + '/vschallenge',
+      paramSerializer: '$httpParamSerializerJQLike'
+    })
+    .then(function(challenges) {
+      //will need to set these challenges for both users, when communication is established
+      console.log(challenges);
+    })
+  } 
 
   //SETs currentChallengeData to returned Data
 
@@ -360,8 +357,8 @@ angular.module('rehjeks.factories', [
     getUserChallenges: getUserChallenges,
     getRandom: getRandom,
     getChallenge: getChallenge,
+    fetchRandomQuestion: fetchRandomQuestion,
     getUsers: getUsers,
-    getSingleUser: getSingleUser,
     currentChallenge: currentChallenge,
     submitUserSolution: submitUserSolution,
     submitNewChallenge: submitNewChallenge,

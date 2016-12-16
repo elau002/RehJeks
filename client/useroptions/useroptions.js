@@ -5,13 +5,14 @@ angular.module('rehjeks.useroptions', [
 .controller('UserOptionsController', function($scope, Server, $cookies, $location) {
   $scope.user = {
     challenges: [],
-    score: 0
+    score: $cookies.get('userScore')
   };
   $scope.loggedin = true;
   // We store the points on the window and use that until we get the list of challenges
   $scope.points = window.GlobalUser.points || 0;
   $scope.logout = function() {
     $cookies.remove('username');
+    $cookies.remove('userScore');
     $scope.loggedin = false;
   };
   
@@ -19,9 +20,6 @@ angular.module('rehjeks.useroptions', [
     $location.path('/profile');
   };
   
-  $scope.getSingleUser = function() {
-    return Server.getSingleUser();
-  }
   // Get challenges solved by user in order to enumerate points
   Server.getUserChallenges($scope, $cookies.get('username'))
   .then(results => {
@@ -32,6 +30,5 @@ angular.module('rehjeks.useroptions', [
     .reduce((a, b) => a + b);
     $scope.points = window.GlobalUser.points;
   });
-  ;
 });
  

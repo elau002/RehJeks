@@ -33,7 +33,7 @@ module.exports.signup = function(req, res, next) {
     else{
       passport.authenticate('local')(req, res, function () {
       console.log('authenticated!');
-      res.json({message: 'Success', username: req.user.username, userid: req.user.id});
+      res.json({message: 'Success', username: req.user.username, userid: req.user.id, score: req.user.score});
     });
     }
   });
@@ -50,11 +50,3 @@ module.exports.getUsers = function(req, res) {
   })
 };
 
-module.exports.getSingleUser = function(req, res) {
-  User.findOne(req.query, function (err, user) {
-    if(err) {
-      res.status(500).send(err);
-    }
-    res.send(user);
-  })
-}
