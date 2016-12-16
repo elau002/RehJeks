@@ -80,14 +80,16 @@ angular.module('rehjeks.factories', [
 
 //require auth/being signed in
 //figure out how to access currently logged in user
-.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub) {
+.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub, PUBLISH_KEY, SUBSCRIBE_KEY) {
   //subscribe to a channel
   var subscribe = function(channelNameArray) {
     //subscribe with given channel, with presence true
     Pubnub.subscribe({
       channels: channelNameArray, 
-      withPresence: true
+      withPresence: true,
+      triggerEvents: true
     });
+    console.log('subscribed to channels ', channelNameArray);
   };
 
   //publish to channel
@@ -118,18 +120,19 @@ angular.module('rehjeks.factories', [
   //includes .once function, so will need to be re-intialized for every new queueing
   var initPubnub = function() {
     Pubnub.init({
-      subscribeKey: 'sub-c-c95e1814-c251-11e6-b38f-02ee2ddab7fe',
-      publishKey: 'pub-c-6d77ac1d-8da3-4140-9a9a-c0da9b0c0bf9',
+      subscribeKey: SUBSCRIBE_KEY,
+      publishKey: PUBLISH_KEY,
             //dont know if this works, may need to require in a factory that has access to current user
       uuid: $cookies.get('username'), 
       ssl: true,
     });
+    console.log('started Pubnub as ', Pubnub.getUUID());
     //add listeners
     Pubnub.addListener({
     //on new presence
       presence: function(p) {
       //if someone joins the queue channel
-        if (p.action === 'join' && p.channel === 'queue') {
+        if (p.action === 'join' && p.channel === 'queue' && p.uuid !== $cookies.get('username')) {
         //if no partner
           if (!partner) { 
           //send message to queue channel with our username and new presences username
@@ -170,7 +173,7 @@ angular.module('rehjeks.factories', [
 
 .factory('Server', function($http, $location, $cookies, $sanitize) {
 
-  var serverURL = $location.protocol() + '://' + location.host;
+  var serverURL = $location.protocol() + '://' + location.host; 
   //shared acces for Challenges and Solve Controller
   var currentChallenge = {data: undefined};
 
