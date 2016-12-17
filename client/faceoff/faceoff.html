@@ -11,34 +11,22 @@
     <p class="challenge-expected">{{challengeData.expected}}</p>
 
     <div class="solve-form">
-      <form name="solveForm" ng-submit='submit()'>
-        <input id="regex-attempt" type="text" ng-model='attempt' ng-change="checkRegex()" focus-on-me>
+      <form name="solveForm">
+        <input id="regex-attempt" type="text" ng-model='attempt' ng-change='inputFaceoff()' focus-on-me>
       </form>
     </div>
 
     <br>
-    <div ng-if="success" class="green-box fade fade-slow">
-      Great Job! Press Enter to submit and get a new challenge
+    <div ng-if="faceoffFinishedFlag">
+      <div ng-if='faceoffWonFlag'>You Win!!!</div>
+      <div ng-if='!faceoffWonFlag'>You Lose!!</div>
     </div>
-    <div ng-if="failure" class="red-box fade fade-fast">
-      Tests failed! Expected {{ challengeData.expected }}, your RegEx matched {{ attemptMatch || "nothing :(" }}.
-    </div>
-    <div ng-if="showHint" class="show-type-hint fade">
-      (Just Start Typing)
-    </div>
-    <div ng-if="false" class="red-box fade fade-fast">
-      Invalid RegEx!
+    <div ng-if="faceoffFinishedFlag">
+      <button>Face another opponent!</button>
+      <button>Practice alone</button>
     </div>
   </div>
-  <div ng-if="success && otherSolutions.length" class="fade fade-slow">
-    <h2 class="challenge-blurb-title">Others' Solutions:</h2>
-    <div ng-repeat="solution in otherSolutions">
-      <hr>
-      <p class="challenge-blurb-solution">{{solution.solution}}</p>
-      <p class="challenge-blurb-difficulty">Time to solve: {{showTime(solution.timeToSolve)}}</p>
-      <p class="challenge-blurb-difficulty">({{formatTime(solution.createdAt)}})</p>
-    </div>
-  </div>
+ 
   <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 opponent-prompt">
     <h3 class="opponent-prompt-title">{{challengeData.title}}</h3>
     <br>
@@ -46,11 +34,9 @@
     <p class="opponent-text" ng-bind-html="highlightedText"></p>
 
     <br>
-    <div ng-if="success" class="green-box fade fade-slow">
-      Great Job! Press Enter to submit and get a new challenge
-    </div>
-    <div ng-if="failure" class="red-box fade fade-fast">
-      Tests failed! Expected {{ challengeData.expected }}, your RegEx matched {{ attemptMatch || "nothing :(" }}.
+    <div ng-if="faceoffFinishedFlag">
+      <div ng-if='faceoffWonFlag'>DEFEATED!!</div>
+      <div ng-if='!faceoffWonFlag'>VICTORIOUS!!!</div>
     </div>
   </div>
   </div
