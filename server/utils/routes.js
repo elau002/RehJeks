@@ -12,7 +12,7 @@ module.exports = function (app, express) {
 
   app.get('/challenges', challengeController.getChallenges);
 
-  app.get('/vschallenge', challengeController.fetchRandomChallenge)
+  app.get('/vschallenge', challengeController.fetchRandomQuestion)
 
   app.get('/solution', solutionController.getOtherSolutions);
 
