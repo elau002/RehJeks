@@ -1,3 +1,4 @@
+
 angular.module('rehjeks', [
   'rehjeks.factories',
   'rehjeks.landingPage',
@@ -148,7 +149,6 @@ angular.module('rehjeks', [
         requireAuth: true
       })
 
-<<<<<<< HEAD
       .state('profile', {
         url: '/profile',
         requireAuth: true,
