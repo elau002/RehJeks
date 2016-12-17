@@ -1,19 +1,19 @@
 <div id='landingpage' ng-controller='landingPageController' class="container-fluid">
     <div id="landingRow" class="row">
         <div class="col col-md-4 col-xs-4 col-lg-4 col-md-offset-1 col-xs-offset-1 col-lg-offset-1 ">
-            <div>
+            <div id="linkColumn">
                 <button id="linkContainer" class="container-fluid"><a class="linkColor" ui-sref="solve">Solve</a></button>
                 <p class="helper"> Solve a Random Challenge</p>
             </div>
-            <div >
+            <div id="linkColumn">
                 <button id="linkContainer" class="container-fluid"><a class="linkColor" ui-sref="challenges">Challenges</a></button>
                 <p class="helper"> Look at All Challenges</p>
             </div>
-            <div>
+            <div id="linkColumn">
                 <button id="linkContainer" class="container-fluid"><a class="linkColor" ui-sref="leaderboard">Multiplayer</a></button>
                 <p class="helper"> Challenge Other Users</p>
             </div>
-            <div>
+            <div id="linkColumn">
                 <button id="linkContainer" class="container-fluid"><a class="linkColor" ui-sref="submit">Submit</a></button>
                 <p class="helper"> Make Your Own Challenge</p>
             </div>
@@ -51,6 +51,7 @@
                       <p class="easy"> Easy: {{user.difficulties.easy}}</p>
                       <p class="medium"> Medium: {{user.difficulties.medium}}</p>
                       <p class="hard"> Hard: {{user.difficulties.hard}}</p>
+                      <hr>
                       <h2> Rating</h2>
                       <h3> {{user.score}} pts. </h3>
                   </div>
