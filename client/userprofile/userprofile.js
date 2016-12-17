@@ -28,6 +28,7 @@ angular.module('rehjeks.profile', [
     }
     if(newValue) {
       $scope.user.username = $cookies.get('username');
+      $scope.user.score = $cookies.get('score');
     } 
   });
   // Get the challenges the user has solved
