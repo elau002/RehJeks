@@ -4,12 +4,11 @@ var Challenge = require('./challengeModel');
 var Solution = require('./../solutions/solutionModel');
 
 
-var localDb = 'mongodb://elliott:e@ds133378.mlab.com:33378/rehjeks_test';
+//var localDb = 'mongodb://elliott:e@ds133378.mlab.com:33378/rehjeks_test';
+// var deployedDb = 'mongodb://heroku_rhmw8v8m:ugiqvmqosj3ed5et4c2o3hh0or@ds127938.mlab.com:27938/heroku_rhmw8v8m';
+// var devDb = 'mongodb://heroku_4jtklz9c:rp6b84vg6f1h0qhl7g1ajh9csj@ds127948.mlab.com:27948/heroku_4jtklz9c';
 
-var deployedDb = 'mongodb://heroku_rhmw8v8m:ugiqvmqosj3ed5et4c2o3hh0or@ds127938.mlab.com:27938/heroku_rhmw8v8m';
-var devDb = 'mongodb://heroku_4jtklz9c:rp6b84vg6f1h0qhl7g1ajh9csj@ds127948.mlab.com:27948/heroku_4jtklz9c';
-
-var db = mongoose.connect(localDb);
+var db = mongoose.connect(mlabsTestDb);
 
 
 // run this command in terminal from root directory to fetch data:   node server/utils/challenges/challengesStubs.js
@@ -135,7 +134,38 @@ var challengeArray = [
     'difficulty': 'medium',
     'expected': ['I', 'have', 'the', 'best', 'words'],
     'cheats': ['']
+  },
+  {
+    'id': '13',
+    'title': 'Date Format',
+    'prompt': "Match a date that follows the following standard",
+    'text':  'a023041s22b0011',
+    'difficulty': 'medium',
+    'expected': ['02:04'],
+    'answer': '^([0-1][0-9]|[2][0-3]):([0-5][0-9])$',
+    'cheats': ['']
+  },
+  {
+    'id': '14',
+    'title': 'Say Hello',
+    'prompt': "Match the hidden word",
+    'text':  '51h124e6-87l723-4l3.1.2o3',
+    'difficulty': 'medium',
+    'expected': ['h','e','l','l','o'],
+    'answer': '[a-z]',
+    'cheats': ['']
+  },
+  {
+    'id': '15',
+    'title': 'IPV4 Format without the dots',
+    'prompt': "Match an IPv4 address",
+    'text':  '12700112',
+    'difficulty': 'easy',
+    'expected': ['127001'],
+    'answer': '/\\d{6}/gi',
+    'cheats': ['']
   }
+  
 
 ];
 

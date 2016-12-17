@@ -80,7 +80,7 @@ angular.module('rehjeks.factories', [
 
 //require auth/being signed in
 //figure out how to access currently logged in user
-.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub) {
+.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub, Server) {
   //subscribe to a channel
   var subscribe = function(channelNameArray) {
     //subscribe with given channel, with presence true
@@ -109,11 +109,14 @@ angular.module('rehjeks.factories', [
 
   //store current partner in competition
   var partner = '';
+  var challenge = {};
+  var gameOver = '';
+  var input = '';
 
   //define function to invite a  user to chat
-  var inviteUserInQueue = function(otherUser) {  
-                        //dont know if this works, may need to require in a factory that has access to current user
-    publish([otherUser, $cookies.get('username')], 'queue');
+  var inviteUserInQueue = function(otherUser, challenge) { 
+
+    publish([otherUser, $cookies.get('username'), challenge], 'queue');
   };
   
   //initialize with uid of the currently logged in user
@@ -135,8 +138,13 @@ angular.module('rehjeks.factories', [
         if (p.action === 'join' && p.channel === 'queue' && p.uuid !== $cookies.get('username')) {
         //if no partner
           if (!partner) { 
-          //send message to queue channel with our username and new presences username
-            inviteUserInQueue(p.uuid);
+           Server.fetchRandomQuestion()
+              .then( (result) => { 
+                //send message to queue channel with our username and new presences username
+                challenge = result.data;
+                inviteUserInQueue(p.uuid, challenge); 
+              })
+              .catch()
           //subscribe to new users channel
             subscribe([p.uuid]);
           //unsub from queue
@@ -144,18 +152,24 @@ angular.module('rehjeks.factories', [
           }  
         }
       },
-    //on message receive,
+    //on message 
       message: function(m) {
       //if message from queue 
         if (m.channel === 'queue') {
         //if contains username, 
-                             //dont know if this works, may need to require in a factory that has access to current user
           if (m.message[0] === $cookies.get('username')) {
           //subscribe to other persons channel
+            challenge = m.message[2];
             subscribe([m.message[1]]);
           //unsub from queue  
             unsubscribe(['queue']);
           }
+        }
+        if (m.message.end) {
+          gameOver = m.message.end
+        }
+        if (m.message.input) {
+          input = m.message.input
         }
       }
     });      
@@ -165,7 +179,10 @@ angular.module('rehjeks.factories', [
     initPubnub: initPubnub,
     subscribe: subscribe,
     unsubscribe: unsubscribe,
-    publish: publish
+    publish: publish,
+    challenge: challenge,
+    gameOver: gameOver,
+    input: input
   };
 
 
@@ -273,10 +290,6 @@ angular.module('rehjeks.factories', [
       method: 'GET',
       url: serverURL + '/vschallenge',
       paramSerializer: '$httpParamSerializerJQLike'
-    })
-    .then(function(challenges) {
-      //will need to set these challenges for both users, when communication is established
-      console.log(challenges);
     })
   } 
 

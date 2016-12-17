@@ -205,7 +205,7 @@ module.exports.submitNewChallenge = function(req, res) {
 };
 
 // Get random question 
-module.exports.fetchRandomChallenge = function(req, res) {
+module.exports.fetchRandomQuestion = function(req, res) {
   Challenge.find({}, function(err, challenge) {
       if(err) {
         res.status(500).send(err);
