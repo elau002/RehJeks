@@ -4,7 +4,7 @@
         <li><a ui-sref="challenges" class="nav-button">Challenges</a></li>
         <li><a ui-sref="submit" class="nav-button">Submit</a></li>
         <li><a ui-sref="multiplayer" class="nav-button">Multiplayer</a></li>
-        <li id="title" class="nav-button"><a>RehJeks</a></li>
+        <li id="title"><a  class="nav-button" ui-sref="landing">RehJeks</a></li>
         <li ng-click="showDropdown = !showDropdown" class="login-button">
           <a ng-if="!loggedIn" ui-sref=".login">Login</a>
           <a ng-if="loggedIn" ui-sref=".useroptions">{{username}}</a>
