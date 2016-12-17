@@ -5,8 +5,6 @@ var Solution = require('./../solutions/solutionModel');
 
 
 //var localDb = 'mongodb://elliott:e@ds133378.mlab.com:33378/rehjeks_test';
-var mlabsTestDb = 'mongodb://regex:regex@ds133438.mlab.com:33438/rehjeks';
-//var db = 'mongodb://localhost/rehjeks';
 // var deployedDb = 'mongodb://heroku_rhmw8v8m:ugiqvmqosj3ed5et4c2o3hh0or@ds127938.mlab.com:27938/heroku_rhmw8v8m';
 // var devDb = 'mongodb://heroku_4jtklz9c:rp6b84vg6f1h0qhl7g1ajh9csj@ds127948.mlab.com:27948/heroku_4jtklz9c';
 
