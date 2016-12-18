@@ -12,10 +12,11 @@
 
 
 
-angular.module('rehjeks.solve', [
-  'ngAnimate'
+angular.module('rehjeks.faceoff', [
+  'ngAnimate',
+  'underscore'
 ])
-.controller('SolveController', function($scope, $interval, Server, $sce, $timeout, $cookies, RegexParser, $moment) {
+.controller('FaceoffController', function($scope, $interval, Server, $sce, $timeout, $cookies, RegexParser, $moment, Pubnub, PUBNUB, _) {
 
   ////////////////////////
   // Internal variables
@@ -63,7 +64,7 @@ angular.module('rehjeks.solve', [
 
   $scope.regexValid;
   $scope.attempt;
-  $scope.challengeData = {};
+  // $scope.challengeData = {};
   $scope.seconds = 0;
   $scope.minutes = 0;
   $scope.showTypeHint = false;
@@ -76,11 +77,11 @@ angular.module('rehjeks.solve', [
 
   //faceoffmode variables
 
-  $scope.faceOffChallengeData; //might not need, depends on if we can pass straight ot challengeData
+  $scope.faceOffChallengeData = {}; //might not need, depends on if we can pass straight ot challengeData
 
   $scope.userScore;
   $scope.opponentName;
-  $scope.opponentAttempt;
+  $scope.opponentAttempt = '//gi';
   $scope.opponentScore;
   $scope.faceoffFinishedFlag = false;
   $scope.faceoffWonFlag = false;
@@ -94,13 +95,25 @@ angular.module('rehjeks.solve', [
   ////////////////////////
   // $scope functions for faceoff
   ////////////////////////
+  
+  
+
+  //testing
+  var func = function() { console.log($scope.attempt, $cookies.get('username')); };
+  var debFunc = _.debounce(func, 300);
+  var publish = function() { PUBNUB.publish({input: $scope.attempt}, $cookies.get('username')); };
+  var debPublish = _.debounce(publish, 300);
 
   $scope.inputFaceoff = function () {
-    //debounce this
-    PUBNUB.publish({input: $scope.attempt}, $cookies.get('username'));
+    
+   
+    debPublish();
+   
+    debFunc();
     //but this should be instant
+    console.log($scope.faceoffChallengeData);
     $scope.checkRegex();
-    if (checkSolution()) {
+    if ($scope.checkSolution()) {
       //send lose
       PUBNUB.publish({lose: 'lose'}, $cookies.get('username'));
       //send final input
@@ -109,6 +122,11 @@ angular.module('rehjeks.solve', [
       //run win function
       $scope.winFaceoff();
     }
+  };
+
+  $scope.getFaceoffChallenge = function() {
+    $scope.faceoffChallengeData = PUBNUB.challenge.value;
+    console.log($scope.faceoffChallengeData);
   };
 
   $scope.leaveFaceoff = function() {
@@ -129,9 +147,10 @@ angular.module('rehjeks.solve', [
   $scope.highlightOpponent = function() {
     //do we need to check if Regex is valid?
     let currentOpponentRegex = RegexParser($scope.opponentAttempt);
+    console.log($scope.faceoffChallengeData);
 
-    let opponentHighlightedText = $scope.challengeData.text.replace(currentOpponentRegex,
-      '<span class="highlighted-text">$&</span>');
+    let opponentHighlightedText = $scope.faceoffChallengeData.text.replace(currentOpponentRegex,
+      '<span class="opponent-text">$&</span>');
 
     $scope.opponentHighlightedText = $sce.trustAsHtml(opponentHighlightedText);
   };
@@ -178,10 +197,10 @@ angular.module('rehjeks.solve', [
       var attemptRegex = RegexParser($scope.attempt);
 
       // Create matches for user's input
-      var userAnswers = $scope.challengeData.text.match(attemptRegex);
+      var userAnswers = $scope.faceoffChallengeData.text.match(attemptRegex);
 
       // Compare user's answers to challenge answers
-      var correctSolution = solutionsMatch(userAnswers, $scope.challengeData.expected);
+      var correctSolution = solutionsMatch(userAnswers, $scope.faceoffChallengeData.expected);
 
       if (correctSolution) {
         $scope.correctAttempt = $scope.attempt;
@@ -201,7 +220,7 @@ angular.module('rehjeks.solve', [
 
     let currentRegex = RegexParser($scope.attempt);
 
-    let highlightedText = $scope.challengeData.text.replace(currentRegex,
+    let highlightedText = $scope.faceoffChallengeData.text.replace(currentRegex,
       '<span class="highlighted-text">$&</span>');
 
     $scope.highlightedText = $sce.trustAsHtml(highlightedText);
@@ -219,8 +238,8 @@ angular.module('rehjeks.solve', [
 
   $scope.submit = function() {
     if ($scope.success) {
-      Server.submitUserSolution($scope.correctAttempt, $scope.challengeData.id, $scope.timeToSolve);
-      window.GlobalUser.solvedChallenges.push($scope.challengeData.id);
+      Server.submitUserSolution($scope.correctAttempt, $scope.faceoffChallengeData.id, $scope.timeToSolve);
+      window.GlobalUser.solvedChallenges.push($scope.faceoffChallengeData.id);
       $scope.success = false;
       $scope.failure = false;
       $scope.getRandom();
@@ -242,7 +261,7 @@ angular.module('rehjeks.solve', [
   $scope.getRandom = function() {
     Server.getRandom($scope)
     .then((testString) => {
-      $scope.highlightedText = $sce.trustAsHtml(testString);
+      // $scope.highlightedText = $sce.trustAsHtml(testString);
       $scope.success = false;
       $scope.failure = false;
       $scope.showAnswers = false;
@@ -260,11 +279,28 @@ angular.module('rehjeks.solve', [
   ////////////////////////
 
   // Load Challenge
-  if (Server.currentChallenge.data !== undefined) {
-    $scope.challengeData = Server.currentChallenge.data;
-    $scope.highlightedText = $sce.trustAsHtml(Server.currentChallenge.data.text);
+  $scope.getFaceoffChallenge();
+  console.log('after', $scope.faceoffChallengeData);
+
+  $scope.$watch(PUBNUB.input.value, function() {
+    console.log('I watch');
+    $scope.opponentAttempt = PUBNUB.input.value || '//gi';
+    if ($scope.faceoffChallengeData !== undefined) {
+      $scope.highlightOpponent();
+    }
+  });
+
+  if ($scope.faceoffChallengeData !== undefined) { //adjust to PUBNUB for testing multi
+    //test on my own with this
+    $scope.highlightedText = $sce.trustAsHtml($scope.faceoffChallengeData.text);
+    $scope.opponentHighlightedText = $sce.trustAsHtml($scope.faceoffChallengeData.text);
+
+    //Get it from PUBNUB in real version below
+    // $scope.faceoffChallengeData = PUBNUB.challenge;
+    // $scope.highlightedText = $sce.trustAsHtml(PUBNUB.challenge);
+    // $scope.opponentHighlightedText = $sce.trustAsHtml(PUBNUB.challenge);
     $scope.attempt = '//gi';
-    $scope.getOtherSolutions();
+    
 
     // Timeout to wait until the page has fully loaded first.
     $timeout(function() {
@@ -280,6 +316,7 @@ angular.module('rehjeks.solve', [
     updateTimer(challStartTime);
   }, 1000);
 
+  
 
 
 })

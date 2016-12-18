@@ -160,7 +160,7 @@ angular.module('rehjeks.factories', [
             if (m.message[0] === $cookies.get('username') && !partner.value) {
               //subscribe to other persons channel
               unsubscribe(['queue']);
-              challenge.value = m.message[2];
+              challenge = m.message[2];
               partner.value = m.message[1];
               subscribe([m.message[1]]);
               $state.go('challenges');
