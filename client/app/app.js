@@ -4,7 +4,7 @@ var underscore = angular.module('underscore', []);
 underscore.factory('_', function() {
   return window._; //Underscore should be loaded on the page
 }); 
-        
+
 angular.module('rehjeks', [
   'rehjeks.factories',
   'rehjeks.login',
@@ -232,4 +232,3 @@ angular.module('rehjeks', [
   .config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
   }]);
-
