@@ -108,10 +108,10 @@ angular.module('rehjeks.factories', [
   };
 
   //store current partner in competition
-  var partner = '';
+  var partner = {};
   var challenge = {};
-  var gameOver = '';
-  var input = '';
+  var gameOver = {};
+  var input = {};
 
   //define function to invite a  user to chat
   var inviteUserInQueue = function(otherUser, challenge) { 
@@ -141,7 +141,7 @@ angular.module('rehjeks.factories', [
             Server.fetchRandomQuestion()
               .then( (result) => { 
                 //send message to queue channel with our username and new presences username
-                challenge = result.data;
+                challenge.value = result.data;
                 inviteUserInQueue(p.uuid, challenge); 
               })
               .catch();
@@ -166,10 +166,10 @@ angular.module('rehjeks.factories', [
           }
         }
         if (m.message.end) {
-          gameOver = m.message.end;
+          gameOver.value = m.message.end;
         }
         if (m.message.input) {
-          input = m.message.input;
+          input.value = m.message.input;
         }
       }
     });      
