@@ -65,10 +65,13 @@ angular.module('rehjeks.multiplayer', [
     
     $scope.joinOneVsOne = function() {
       if ($cookies.getAll().username) {
-        PUBNUB.initPubnub();
-        PUBNUB.subscribe(['queue']);
-        stop = $interval($scope.incrementTimer, 1000); 
-        $scope.isQueued = true;
+        PUBNUB.initPubnub()
+        .then(()=>{
+          PUBNUB.subscribe(['queue']);
+          stop = $interval($scope.incrementTimer, 1000); 
+          $scope.isQueued = true;
+        })
+        .catch((err) => { console.log(err); });
       //add redirect logic here to go to head to head page
       }
     };

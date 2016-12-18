@@ -80,7 +80,7 @@ angular.module('rehjeks.factories', [
 
 //require auth/being signed in
 //figure out how to access currently logged in user
-.factory('PUBNUB', function($http, $location, $cookies, $sanitize, Pubnub, Server) {
+.factory('PUBNUB', function($http, $location, $cookies, $state, $sanitize, Pubnub, Server) {
   //subscribe to a channel
   var subscribe = function(channelNameArray) {
     //subscribe with given channel, with presence true
@@ -125,57 +125,65 @@ angular.module('rehjeks.factories', [
     Pubnub.init({
       subscribeKey: 'sub-c-c95e1814-c251-11e6-b38f-02ee2ddab7fe',
       publishKey: 'pub-c-6d77ac1d-8da3-4140-9a9a-c0da9b0c0bf9',
-            //dont know if this works, may need to require in a factory that has access to current user
       uuid: $cookies.get('username'), 
       ssl: true,
     });
-    console.log('started Pubnub as ', Pubnub.getUUID());
-    //add listeners
-    Pubnub.addListener({
-    //on new presence
-      presence: function(p) {
-      //if someone joins the queue channel
-        if (p.action === 'join' && p.channel === 'queue' && p.uuid !== $cookies.get('username')) {
-        //if no partner
-          if (!partner.value) { 
-            Server.fetchRandomQuestion()
-              .then( (result) => { 
-                //send message to queue channel with our username and new presences username
-                challenge.value = result.data;
-                inviteUserInQueue(p.uuid, challenge); 
-                partner.value = p.uuid;
-              })
-              .catch();
-          //subscribe to new users channel
-            subscribe([p.uuid]);
-          //unsub from queue
-            unsubscribe(['queue']);
-          }  
-        }
-      },
-    //on message 
-      message: function(m) {
-      //if message from queue 
-        if (m.channel === 'queue') {
-        //if contains username, 
-          if (m.message[0] === $cookies.get('username')) {
-          //subscribe to other persons channel
-            challenge.value = m.message[2];
-            subscribe([m.message[1]]);
-          //unsub from queue  
-            unsubscribe(['queue']);
-          }
-        }
-        if (m.message.end) {
-          gameOver.value = m.message.end;
-        }
-        if (m.message.input) {
-          input.value = m.message.input;
-        }
-      }
-    });      
-  };
 
+    console.log('started Pubnub as ', Pubnub.getUUID());
+
+    return Server.fetchRandomQuestion()
+    .then( (result) => {
+      console.log('got challenge ', result.data);
+      partner = {};
+      challenge.value = result.data;
+      gameOver = {};
+      input = {};
+      //add listeners
+      Pubnub.addListener({
+      //on new presence
+        presence: function(p) {
+        //if someone joins the queue channel
+          if (p.action === 'join' && p.channel === 'queue' && p.uuid !== $cookies.get('username') && !partner.value) {
+          //if no partner  
+            unsubscribe(['queue']); 
+            partner.value = p.uuid;
+            inviteUserInQueue(p.uuid, challenge); 
+            subscribe([p.uuid]);
+            $state.go('challenges');
+          }
+        },
+      //on message  
+        message: function(m) {
+        //if message from queue 
+          if (m.channel === 'queue') {
+          //if contains username, 
+            if (m.message[0] === $cookies.get('username') && !partner.value) {
+              //subscribe to other persons channel
+              unsubscribe(['queue']);
+              challenge.value = m.message[2];
+              partner.value = m.message[1];
+              subscribe([m.message[1]]);
+              $state.go('challenges');
+            }
+          }
+          if (m.message.end) {
+            gameOver.value = m.message.end;
+          }
+          if (m.message.input) {
+            input.value = m.message.input;
+          }
+        },
+        status: function(s) {
+          console.log(s);
+        }
+      });
+    });
+  };
+  
+  window.onbeforeunload = function () {
+    Pubnub.unsubscribeAll(); 
+  };
+  
   return {
     initPubnub: initPubnub,
     subscribe: subscribe,
@@ -395,3 +403,4 @@ angular.module('rehjeks.factories', [
 
   return makeRegex;
 });
+
