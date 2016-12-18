@@ -55,7 +55,7 @@ angular.module('rehjeks', [
         views: {
           'nav': {
             templateUrl: 'nav/nav.html',
-            controller: 'NavController' 
+            controller: 'NavController'
           },
           'body': {
             templateUrl: 'landingPage/landingPage.html',
