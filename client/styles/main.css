@@ -616,6 +616,7 @@ tr, #highlightTD {
   border: 2px solid black;
   border-radius: 10px;
   box-shadow: 8px 8px 5px #999;
+}
 
 #linkContainer {
   padding-top:10px;
@@ -647,6 +648,7 @@ a.linkColor {
     color: #ffffff;
     display: block;
 }
+
 p.helper {
   padding-top:10px;
   text-align:center;
