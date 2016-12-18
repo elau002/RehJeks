@@ -137,12 +137,13 @@ angular.module('rehjeks.factories', [
       //if someone joins the queue channel
         if (p.action === 'join' && p.channel === 'queue' && p.uuid !== $cookies.get('username')) {
         //if no partner
-          if (!partner) { 
+          if (!partner.value) { 
             Server.fetchRandomQuestion()
               .then( (result) => { 
                 //send message to queue channel with our username and new presences username
                 challenge.value = result.data;
                 inviteUserInQueue(p.uuid, challenge); 
+                partner.value = p.uuid;
               })
               .catch();
           //subscribe to new users channel
@@ -159,7 +160,7 @@ angular.module('rehjeks.factories', [
         //if contains username, 
           if (m.message[0] === $cookies.get('username')) {
           //subscribe to other persons channel
-            challenge = m.message[2];
+            challenge.value = m.message[2];
             subscribe([m.message[1]]);
           //unsub from queue  
             unsubscribe(['queue']);
