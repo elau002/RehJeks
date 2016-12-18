@@ -616,5 +616,43 @@ tr, #highlightTD {
   border: 2px solid black;
   border-radius: 10px;
   box-shadow: 8px 8px 5px #999;
+}
 
+#linkContainer {
+  padding-top:10px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #D9B883;
+  background-color: #5b63ac;
+  font-size: 150%;
+  box-shadow: 6px 6px 4px #7a84a4;
+}
+
+#linkColumn {
+  padding-top:10%;
+}
+
+#landingRow {
+  padding-top: 20px;
+}
+
+#landingProfile {
+  background-color:#ffffff;
+  box-shadow: 12px 12px 12px #424a5c;
+  border-radius: 10px;
+  padding-bottom: 5px;
+}
+
+a.linkColor {
+    color: #ffffff;
+    display: block;
+}
+
+p.helper {
+  padding-top:10px;
+  text-align:center;
+  color: #7e5c91;
+  font-style:italic;
+  font-size:125%; 
 }

@@ -1,5 +1,6 @@
 angular.module('rehjeks', [
   'rehjeks.factories',
+  'rehjeks.landingPage',
   'rehjeks.login',
   'rehjeks.signup',
   'rehjeks.challenges',
@@ -21,7 +22,7 @@ angular.module('rehjeks', [
     $scope.$on('$stateChangeStart', function (event, newUrl) {
       if (newUrl.requireAuth && document.cookie === '') {
         alert('Must Login to view stats!');
-        $location.path('/solve');
+        $location.path('/');
       }
     });
   })
@@ -30,7 +31,7 @@ angular.module('rehjeks', [
 
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $momentProvider) {
     // redirect to /solve if any unrecognized paths are loaded
-    $urlRouterProvider.otherwise('/solve');
+    $urlRouterProvider.otherwise('/');
 
     // this is just setup for angular-momentjs for relative time display
     $momentProvider
@@ -40,6 +41,31 @@ angular.module('rehjeks', [
     // ui-router uses states instead of URLs to determine views. Here we have associated a
     // URL with each state but it's not necessary.
     $stateProvider
+      .state('landing', {
+        url: '/',
+        views: {
+          "nav": {
+            templateUrl: 'nav/nav.html',
+            controller: 'NavController'
+          },
+          "body": {
+            templateUrl: 'landingPage/landingPage.html',
+            controller: 'landingPageController'
+          }
+        }
+      })
+      .state('landing.login', {
+        templateUrl: 'login/login.html',
+        controller: 'LoginController',
+        parent: 'landing'
+      })
+      .state('landing.useroptions', {
+        templateUrl: 'useroptions/useroptions.html',
+        controller: 'UserOptionsController',
+        parent: 'landing',
+        requireAuth: true
+      })
+
       .state('solve', {
         url: '/solve',
         views: {
