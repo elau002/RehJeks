@@ -81,7 +81,7 @@ angular.module('rehjeks.faceoff', [
 
   $scope.userScore;
   $scope.opponentName;
-  $scope.opponentAttempt = '';
+  $scope.opponentAttempt = PUBNUB.input.value;
   $scope.opponentScore;
   $scope.faceoffFinishedFlag = false;
   $scope.faceoffWonFlag = false;
@@ -104,7 +104,6 @@ angular.module('rehjeks.faceoff', [
 
   $scope.inputFaceoff = function () {
     
-    let opponentAttempt = PUBNUB.input.value;
    
     debPublish();
    
@@ -123,7 +122,7 @@ angular.module('rehjeks.faceoff', [
   };
 
   $scope.getFaceoffChallenge = function() {
-    $scope.faceOffChallengeData = PUBNUB.challenge;
+    $scope.faceOffChallengeData = PUBNUB.challenge.value;
     console.log($scope.faceOffChallengeData);
   };
 
