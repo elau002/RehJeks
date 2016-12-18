@@ -18,11 +18,6 @@ angular.module('rehjeks', [
   'rehjeks.submit',
   'rehjeks.useroptions',
   'rehjeks.multiplayer',
-<<<<<<< HEAD
-  'rehjeks.leaderboard',
-=======
-  'rehjeks.faceoff',
->>>>>>> Add faceoff to routing
   'angular-momentjs',
   'ngAnimate',
   'ui.router',
@@ -207,8 +202,6 @@ angular.module('rehjeks', [
         controller: 'UserOptionsController',
         parent: 'multiplayer'
       })
-<<<<<<< HEAD
-
    .state('leaderboard', {
      url: '/leaderboard',
      views: {
@@ -231,7 +224,7 @@ angular.module('rehjeks', [
         templateUrl: 'useroptions/useroptions.html',
         controller: 'UserOptionsController',
         parent: 'leaderboard'
-=======
+      })
       .state('faceoff', {
         url: '/faceoff',
         views: {
@@ -254,7 +247,6 @@ angular.module('rehjeks', [
         templateUrl: 'useroptions/useroptions.html',
         controller: 'UserOptionsController',
         parent: 'faceoff'
->>>>>>> Add faceoff to routing
       });
   })
   // Workaround for "unhandled rejection" inherent to Angular 1.6.0 with ui-router

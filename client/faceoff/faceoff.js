@@ -77,11 +77,11 @@ angular.module('rehjeks.faceoff', [
 
   //faceoffmode variables
 
-  $scope.faceOffChallengeData; //might not need, depends on if we can pass straight ot challengeData
+  $scope.faceOffChallengeData = {}; //might not need, depends on if we can pass straight ot challengeData
 
   $scope.userScore;
   $scope.opponentName;
-  $scope.opponentAttempt = PUBNUB.input.value;
+  $scope.opponentAttempt = '//gi';
   $scope.opponentScore;
   $scope.faceoffFinishedFlag = false;
   $scope.faceoffWonFlag = false;
@@ -96,6 +96,8 @@ angular.module('rehjeks.faceoff', [
   // $scope functions for faceoff
   ////////////////////////
   
+  
+
   //testing
   var func = function() { console.log($scope.attempt, $cookies.get('username')); };
   var debFunc = _.debounce(func, 300);
@@ -109,6 +111,7 @@ angular.module('rehjeks.faceoff', [
    
     debFunc();
     //but this should be instant
+    console.log($scope.faceoffChallengeData);
     $scope.checkRegex();
     if ($scope.checkSolution()) {
       //send lose
@@ -122,8 +125,8 @@ angular.module('rehjeks.faceoff', [
   };
 
   $scope.getFaceoffChallenge = function() {
-    $scope.faceOffChallengeData = PUBNUB.challenge.value;
-    console.log($scope.faceOffChallengeData);
+    $scope.faceoffChallengeData = PUBNUB.challenge.value;
+    console.log($scope.faceoffChallengeData);
   };
 
   $scope.leaveFaceoff = function() {
@@ -144,6 +147,7 @@ angular.module('rehjeks.faceoff', [
   $scope.highlightOpponent = function() {
     //do we need to check if Regex is valid?
     let currentOpponentRegex = RegexParser($scope.opponentAttempt);
+    console.log($scope.faceoffChallengeData);
 
     let opponentHighlightedText = $scope.faceoffChallengeData.text.replace(currentOpponentRegex,
       '<span class="opponent-text">$&</span>');
@@ -276,6 +280,15 @@ angular.module('rehjeks.faceoff', [
 
   // Load Challenge
   $scope.getFaceoffChallenge();
+  console.log('after', $scope.faceoffChallengeData);
+
+  $scope.$watch(PUBNUB.input.value, function() {
+    console.log('I watch');
+    $scope.opponentAttempt = PUBNUB.input.value || '//gi';
+    if ($scope.faceoffChallengeData !== undefined) {
+      $scope.highlightOpponent();
+    }
+  });
 
   if ($scope.faceoffChallengeData !== undefined) { //adjust to PUBNUB for testing multi
     //test on my own with this
