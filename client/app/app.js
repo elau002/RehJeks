@@ -1,16 +1,24 @@
 
+//there might be a better way to do this in order to give us access to underscore
+var underscore = angular.module('underscore', []);
+underscore.factory('_', function() {
+  return window._; //Underscore should be loaded on the page
+}); 
+        
 angular.module('rehjeks', [
   'rehjeks.factories',
-  'rehjeks.landingPage',
   'rehjeks.login',
   'rehjeks.signup',
   'rehjeks.challenges',
+  'rehjeks.landingPage',
   'rehjeks.solve',
+  'rehjeks.faceoff',
   'rehjeks.profile',
   'rehjeks.nav',
   'rehjeks.submit',
   'rehjeks.useroptions',
   'rehjeks.multiplayer',
+  'rehjeks.leaderboard',
   'angular-momentjs',
   'ngAnimate',
   'ui.router',
@@ -66,7 +74,6 @@ angular.module('rehjeks', [
         parent: 'landing',
         requireAuth: true
       })
-
       .state('solve', {
         url: '/solve',
         views: {
@@ -148,7 +155,6 @@ angular.module('rehjeks', [
         parent: 'submit',
         requireAuth: true
       })
-
       .state('profile', {
         url: '/profile',
         requireAuth: true,
@@ -196,9 +202,34 @@ angular.module('rehjeks', [
         templateUrl: 'useroptions/useroptions.html',
         controller: 'UserOptionsController',
         parent: 'multiplayer'
+      })
+
+   .state('leaderboard', {
+     url: '/leaderboard',
+     views: {
+       'nav': {
+         templateUrl: 'nav/nav.html',
+         controller: 'NavController'
+       },
+       'body': {
+         templateUrl: 'leaderBoard/leaderBoard.html',
+         controller: 'leaderBoardController'
+       } 
+     }
+   })
+      .state('leaderboard.login', {
+        templateUrl: 'login/login.html',
+        controller: 'LoginController',
+        parent: 'leaderboard'
+      })
+      .state('leaderboard.useroptions', {
+        templateUrl: 'useroptions/useroptions.html',
+        controller: 'UserOptionsController',
+        parent: 'leaderboard'
       });
   })
   // Workaround for "unhandled rejection" inherent to Angular 1.6.0 with ui-router
   .config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
   }]);
+

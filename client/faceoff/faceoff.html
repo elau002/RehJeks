@@ -1,14 +1,14 @@
 <div class='row'>
   <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 challenge-prompt">
-    <h3 class="challenge-prompt-title">{{challengeData.title}}</h3>
+    <h3 class="challenge-prompt-title">{{faceoffChallengeData.title}}</h3>
     <br>
-    <p class="challenge-description">{{challengeData.prompt}}</p>
+    <p class="challenge-description">{{faceoffChallengeData.prompt}}</p>
     <br>
     <p class="challenge-expected-label">Test String:</p>
     <p class="challenge-text" ng-bind-html="highlightedText"></p>
     <br>
     <h4 class="challenge-expected-label">Expected Matches:</h4>
-    <p class="challenge-expected">{{challengeData.expected}}</p>
+    <p class="challenge-expected">{{faceoffChallengeData.expected}}</p>
 
     <div class="solve-form">
       <form name="solveForm">
@@ -28,12 +28,13 @@
   </div>
  
   <div class="col col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 opponent-prompt">
-    <h3 class="opponent-prompt-title">{{challengeData.title}}</h3>
+    <h3 class="opponent-prompt-title">{{faceoffChallengeData.title}}</h3>
     <br>
     <p class="opponent-expected-label">Opponent Progress:</p>
     <p class="opponent-text" ng-bind-html="opponentHighlightedText"></p>
-
     <br>
+     <h4 class="challenge-expected-label">Opponent Text:</h4>
+    <p class="challenge-expected">{{opponentAttempt}}</p>
     <div ng-if="faceoffFinishedFlag">
       <div ng-if='faceoffWonFlag'>DEFEATED!!</div>
       <div ng-if='!faceoffWonFlag'>VICTORIOUS!!!</div>
