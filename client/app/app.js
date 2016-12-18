@@ -44,11 +44,11 @@ angular.module('rehjeks', [
       .state('landing', {
         url: '/',
         views: {
-          "nav": {
+          'nav': {
             templateUrl: 'nav/nav.html',
-            controller: 'NavController'
+            controller: 'NavController' 
           },
-          "body": {
+          'body': {
             templateUrl: 'landingPage/landingPage.html',
             controller: 'landingPageController'
           }
