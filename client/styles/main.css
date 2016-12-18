@@ -612,7 +612,6 @@ tr, #highlightTD {
   display: block;
   width: 100%;
   height: 100%;
-  border: 1px solid #D9B883;
   background-color: #5b63ac;
   font-size: 150%;
   box-shadow: 6px 6px 4px #7a84a4;
@@ -631,6 +630,8 @@ tr, #highlightTD {
   box-shadow: 12px 12px 12px #424a5c;
   border-radius: 10px;
   padding-bottom: 5px;
+  border: 2px solid #bcbcbc;
+
 }
 
 a.linkColor {
