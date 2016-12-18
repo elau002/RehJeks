@@ -1,5 +1,5 @@
 angular.module('rehjeks.multiplayer', [
-  'ngCookies'
+  'ngCookies' 
 ])
 
   .controller('multiplayerController', function ($scope, Server, $cookies, $sce, PUBNUB, Pubnub, $interval) {
