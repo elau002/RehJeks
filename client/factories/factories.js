@@ -37,7 +37,7 @@ angular.module('rehjeks.factories', [
 
         // Set cookies if login successful!
         document.cookie = `username=${successRes.data.username}; userId=${successRes.data.userid};`;
-        document.cookie = `userScore =${successRes.data.score};`
+        document.cookie = `userScore =${successRes.data.score};`;
         // This will change the "Login" anchor tag in the navbar to your username
         $scope.loggedin = true;
         return true;
@@ -277,8 +277,8 @@ angular.module('rehjeks.factories', [
     .then(function(challenges) {
       //will need to set these challenges for both users, when communication is established
       console.log(challenges);
-    })
-  } 
+    });
+  }; 
 
   //SETs currentChallengeData to returned Data
 
