@@ -52,9 +52,9 @@ module.exports.getUsers = function(req, res) {
 module.exports.updateScore = function(req, res) {
   User.findOneAndUpdate({username: req.body.username}, 
     {$set: { wins: req.body.wins,
-          loses: req.body.loses,
-          score: req.body.score
-        }}, function () {
-          res.send(204);
-        });
+      loses: req.body.loses,
+      score: req.body.score
+    }}, function () {
+      res.send(204);
+    });
 };
