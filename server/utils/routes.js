@@ -35,5 +35,7 @@ module.exports = function (app, express) {
 
   app.post('/challenge', challengeController.submitNewChallenge);
 
+  app.put('/leaderboard', user.updateScore);
+
 };
  
