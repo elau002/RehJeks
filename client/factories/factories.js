@@ -397,13 +397,13 @@ angular.module('rehjeks.factories', [
       username: $cookies.get('username'),
       wins: $cookies.get('wins'),
       loses: $cookies.get('loses'),
-      score: $cookies.get('score')
+      score: $cookies.get('userScore')
     };
 
     return $http({
       method: 'PUT',
       url: serverURL + '/leaderboard',
-      params: userUpdate
+      data: JSON.stringify(userUpdate)
     });
   };
   ///////////////////////////
