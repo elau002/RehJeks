@@ -648,5 +648,15 @@ p.helper {
 }
 
 .highlighted-opponent-text {
-  background-color: #83B0D9
+  background-color: #B55;
+  border-radius: 5px;
+}
+
+.opponent-text {
+  text-align: center;
+
+  background-color: #DDD;
+  font-family: "Helvetica Neue Light";
+  font-size: 24px;
+  color: #444;
 }
