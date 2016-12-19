@@ -402,7 +402,7 @@ angular.module('rehjeks.factories', [
 
     return $http({
       method: 'PUT',
-      url: serverURL + 'leaderboard',
+      url: serverURL + '/leaderboard',
       params: userUpdate
     });
   };
