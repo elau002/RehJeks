@@ -417,6 +417,7 @@ angular.module('rehjeks.factories', [
     getChallenge: getChallenge,
     fetchRandomQuestion: fetchRandomQuestion,
     getUsers: getUsers,
+    updateScore: updateScore,
     currentChallenge: currentChallenge,
     submitUserSolution: submitUserSolution,
     submitNewChallenge: submitNewChallenge,
