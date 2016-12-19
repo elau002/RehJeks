@@ -139,6 +139,7 @@ angular.module('rehjeks.faceoff', [
   };
 
   $scope.winFaceoff = function() {
+    
       //send final input
     PUBNUB.publish({input: $scope.attempt}, $cookies.get('username'));
       //send lose
@@ -150,15 +151,27 @@ angular.module('rehjeks.faceoff', [
     PUBNUB.unsubscribe();
       
     //send a win to the database for the this user
+    var wins = $cookies.get('wins');
+    wins += 1;
+    $cookies.put('wins', wins);
+
+    Server.updateScore();
 
   };
   $scope.loseFaceoff = function() {
     $scope.faceoffFinishedFlag = true;
     $scope.faceoffWonFlag = false;
 
+    
+
     PUBNUB.unsubscribe();
 
     //send loss to database for this user
+    var loses = $cookies.get('loses');
+    loses += 1;
+    $cookies.put('loses', loses);
+
+    Server.updateScore();
 
   };
   $scope.highlightOpponent = function() {
