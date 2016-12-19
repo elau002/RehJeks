@@ -106,12 +106,12 @@ angular.module('rehjeks.faceoff', [
 
   $scope.inputFaceoff = function () {
     
-   
+    console.log(PUBNUB.input.value);
     debPublish();
    
     debFunc();
     //but this should be instant
-    console.log($scope.faceoffChallengeData);
+    
     $scope.checkRegex();
     if ($scope.checkSolution()) {
       //send lose
@@ -126,7 +126,6 @@ angular.module('rehjeks.faceoff', [
 
   $scope.getFaceoffChallenge = function() {
     $scope.faceoffChallengeData = PUBNUB.challenge.value;
-    console.log($scope.faceoffChallengeData);
   };
 
   $scope.leaveFaceoff = function() {
@@ -147,10 +146,9 @@ angular.module('rehjeks.faceoff', [
   $scope.highlightOpponent = function() {
     //do we need to check if Regex is valid?
     let currentOpponentRegex = RegexParser($scope.opponentAttempt);
-    console.log($scope.faceoffChallengeData);
 
     let opponentHighlightedText = $scope.faceoffChallengeData.text.replace(currentOpponentRegex,
-      '<span class="opponent-text">$&</span>');
+      '<span class="highlighted-opponent-text">$&</span>');
 
     $scope.opponentHighlightedText = $sce.trustAsHtml(opponentHighlightedText);
   };
@@ -280,11 +278,15 @@ angular.module('rehjeks.faceoff', [
 
   // Load Challenge
   $scope.getFaceoffChallenge();
-  console.log('after', $scope.faceoffChallengeData);
 
-  $scope.$watch(PUBNUB.input.value, function() {
-    console.log('I watch');
-    $scope.opponentAttempt = PUBNUB.input.value || '//gi';
+  $scope.$watch(function() {
+    console.log('digest ran');
+  }); 
+
+  $scope.$watch(PUBNUB.getInput, function(newVal, oldVal) {
+    console.log(newVal);
+    console.log(oldVal);
+    $scope.opponentAttempt = newVal || '//gi';
     if ($scope.faceoffChallengeData !== undefined) {
       $scope.highlightOpponent();
     }

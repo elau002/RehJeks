@@ -149,7 +149,7 @@ angular.module('rehjeks.factories', [
             partner.value = p.uuid;
             inviteUserInQueue(p.uuid, challenge); 
             subscribe([p.uuid]);
-            $state.go('challenges');
+            $state.go('faceoff');
           }
         },
       //on message  
@@ -160,10 +160,10 @@ angular.module('rehjeks.factories', [
             if (m.message[0] === $cookies.get('username') && !partner.value) {
               //subscribe to other persons channel
               unsubscribe(['queue']);
-              challenge = m.message[2];
+              challenge.value = m.message[2].value;
               partner.value = m.message[1];
               subscribe([m.message[1]]);
-              $state.go('challenges');
+              $state.go('faceoff');
             }
           }
           if (m.message.end) {
@@ -184,6 +184,9 @@ angular.module('rehjeks.factories', [
     Pubnub.unsubscribeAll(); 
   };
   
+  var getInput = function() {
+    return input.value;
+  };
   return {
     initPubnub: initPubnub,
     subscribe: subscribe,
@@ -191,7 +194,8 @@ angular.module('rehjeks.factories', [
     publish: publish,
     challenge: challenge,
     gameOver: gameOver,
-    input: input
+    input: input,
+    getInput: getInput
   };
 
 
