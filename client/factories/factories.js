@@ -101,11 +101,7 @@ angular.module('rehjeks.factories', [
     });
   };
 
-  //unsubscribe to channel
-  var unsubscribe = function(unsubArray) {
-    //unsubscribe to given channel 
-    Pubnub.unsubscribe({channels: unsubArray});
-  };
+ 
 
   //store current partner in competition
   var partner = {};
@@ -117,6 +113,20 @@ angular.module('rehjeks.factories', [
   var inviteUserInQueue = function(otherUser, challenge) { 
 
     publish([otherUser, $cookies.get('username'), challenge], 'queue');
+  };
+
+   //unsubscribe to channel--call with no args to unsub all and reset factory values
+  var unsubscribe = function(unsubArray) {
+    //unsubscribe to given channel 
+    if (unsubArray === undefined) {
+      Pubnub.unsubscribeAll();
+      partner = {};
+      challenge = {};
+      gameOver = {};
+      input = {};
+    } else {
+      Pubnub.unsubscribe({channels: unsubArray});
+    }
   };
   
   //initialize with uid of the currently logged in user

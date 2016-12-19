@@ -18,6 +18,8 @@
     <div ng-if='faceoffFinishedFlag'>{{finalAnswer}}</div>
 
     <br>
+    <button ng-click='leaveFaceoff()'>Leave (this counts as a loss)</button>
+    <br>
     <div ng-if="faceoffFinishedFlag">
       <div ng-if='faceoffWonFlag'>You Win!!!</div>
       <div ng-if='!faceoffWonFlag'>You Lose!!</div>

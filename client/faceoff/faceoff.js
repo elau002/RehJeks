@@ -16,7 +16,7 @@ angular.module('rehjeks.faceoff', [
   'ngAnimate',
   'underscore'
 ])
-.controller('FaceoffController', function($scope, $interval, Server, $sce, $timeout, $cookies, RegexParser, $moment, Pubnub, PUBNUB, _) {
+.controller('FaceoffController', function($scope, $interval, Server, $sce, $timeout, $cookies, RegexParser, $moment, Pubnub, PUBNUB, _, $state) {
 
   ////////////////////////
   // Internal variables
@@ -134,8 +134,10 @@ angular.module('rehjeks.faceoff', [
     $scope.loseFaceoff();
 
     //end subscriptions
+    PUBNUB.unsubscribe();
 
     //redirect
+    $state.go('multiplayer');
 
   };
 
