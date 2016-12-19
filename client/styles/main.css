@@ -656,3 +656,7 @@ p.helper {
   font-style:italic;
   font-size:125%; 
 }
+
+.highlighted-opponent-text {
+  background-color: #83B0D9
+}
