@@ -18,15 +18,16 @@
     <div ng-if='faceoffFinishedFlag'>{{finalAnswer}}</div>
 
     <br>
-    <button ng-click='leaveFaceoff()'>Leave (this counts as a loss)</button>
+    <button ng-if='!faceoffFinishedFlag' ng-click='leaveFaceoff()'>Leave (this counts as a loss)</button>
+    <button ng-click='winFaceoff()'>WIN NOW</button>
     <br>
     <div ng-if="faceoffFinishedFlag">
       <div ng-if='faceoffWonFlag'>You Win!!!</div>
       <div ng-if='!faceoffWonFlag'>You Lose!!</div>
     </div>
     <div ng-if="faceoffFinishedFlag">
-      <button>Face another opponent!</button>
-      <button>Practice alone</button>
+      <button ui-sref='multiplayer'>Play more multiplayer!</button>
+      <button ui-sref='solve'>Practice alone</button>
     </div>
   </div>
  

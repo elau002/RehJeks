@@ -116,10 +116,7 @@ angular.module('rehjeks.faceoff', [
     $scope.checkRegex();
     if ($scope.checkSolution()) {
       $scope.finalAnswer = $scope.attempt;
-      //send final input
-      PUBNUB.publish({input: $scope.attempt}, $cookies.get('username'));
-      //send lose
-      PUBNUB.publish({end: 'lose'}, $cookies.get('username'));
+      
       //run win function
       $scope.winFaceoff();
     }
@@ -142,10 +139,15 @@ angular.module('rehjeks.faceoff', [
   };
 
   $scope.winFaceoff = function() {
+      //send final input
+    PUBNUB.publish({input: $scope.attempt}, $cookies.get('username'));
+      //send lose
+    PUBNUB.publish({end: 'lose'}, $cookies.get('username'));
       //freeze input
       //reveal buttons
     $scope.faceoffFinishedFlag = true;
     $scope.faceoffWonFlag = true;
+    PUBNUB.unsubscribe();
       
     //send a win to the database for the this user
 
@@ -153,6 +155,8 @@ angular.module('rehjeks.faceoff', [
   $scope.loseFaceoff = function() {
     $scope.faceoffFinishedFlag = true;
     $scope.faceoffWonFlag = false;
+
+    PUBNUB.unsubscribe();
 
     //send loss to database for this user
 
