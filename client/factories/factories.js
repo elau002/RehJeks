@@ -187,6 +187,9 @@ angular.module('rehjeks.factories', [
   var getInput = function() {
     return input.value;
   };
+  var getGameOver = function() {
+    return gameOver.value;
+  };
   return {
     initPubnub: initPubnub,
     subscribe: subscribe,
@@ -195,7 +198,8 @@ angular.module('rehjeks.factories', [
     challenge: challenge,
     gameOver: gameOver,
     input: input,
-    getInput: getInput
+    getInput: getInput,
+    getGameOver: getGameOver
   };
 
 
