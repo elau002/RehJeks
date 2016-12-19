@@ -152,9 +152,17 @@ angular.module('rehjeks.faceoff', [
       
     //send a win to the database for the this user
     var wins = $cookies.get('wins');
-    wins += 1;
+    Number(wins);
+    wins ++;
     $cookies.put('wins', wins);
-
+    var score = $cookies.get('userScore');
+    Number(score); 
+    score ++;
+    score ++;
+    score ++;
+    score ++;
+    score ++;
+    $cookies.put('userScore', score);
     Server.updateScore();
 
   };
@@ -168,8 +176,17 @@ angular.module('rehjeks.faceoff', [
 
     //send loss to database for this user
     var loses = $cookies.get('loses');
-    loses += 1;
+    Number(loses);
+    loses ++;
     $cookies.put('loses', loses);
+    var score = $cookies.get('userScore');
+    Number(score); 
+    score --;
+    score --;
+    score --;
+    score --;
+    score --;
+    $cookies.put('userScore', score);
 
     Server.updateScore();
 
