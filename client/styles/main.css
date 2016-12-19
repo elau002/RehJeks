@@ -23,10 +23,6 @@ button:hover {
   color: white;
 }
 
-.solve-row {
-  align: center;
-}
-
 .challenge-prompt {
   padding: 10px 20px;
   font-size: 24px;
@@ -84,10 +80,6 @@ button:hover {
   outline: none;
 }
 
-.skip-button {
-  align: center;
-}
-
 .solve-form {
   text-align: center;
 }
@@ -127,7 +119,6 @@ button:hover {
 .challenge-blurb-desc {
   font-family: "Helvetica Neue";
   text-align: left;
-  down: 50px;
 }
 
 .challenge-blurb-difficulty {
@@ -488,7 +479,6 @@ hr {
 
 label#difficulty {
   color: #333;
-  align: center;
   font-size: 1em;
 }
 
@@ -530,7 +520,6 @@ textarea {
 .textInput {
   display: inline-block;
   /*width: 350px;*/
-  float:right;
   width: 100%;
 }
 
