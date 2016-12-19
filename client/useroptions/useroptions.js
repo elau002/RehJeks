@@ -13,6 +13,8 @@ angular.module('rehjeks.useroptions', [
   $scope.logout = function() {
     $cookies.remove('username');
     $cookies.remove('userScore');
+    $cookies.remove('wins');
+    $cookies.remove('loses');
     $scope.loggedin = false;
   };
   

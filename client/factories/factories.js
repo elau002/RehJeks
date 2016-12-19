@@ -38,6 +38,9 @@ angular.module('rehjeks.factories', [
         // Set cookies if login successful!
         document.cookie = `username=${successRes.data.username}; userId=${successRes.data.userid};`;
         document.cookie = `userScore =${successRes.data.score};`;
+        document.cookie = `wins = ${successRes.data.wins};`;
+        document.cookie = `loses = ${successRes.data.loses};`;
+
         // This will change the "Login" anchor tag in the navbar to your username
         $scope.loggedin = true;
         return true;
@@ -388,6 +391,21 @@ angular.module('rehjeks.factories', [
     });
 
   };
+
+  var updateScore = function($scope) {
+    var userUpdate = {
+      username: $cookies.get('username'),
+      wins: $cookies.get('wins'),
+      loses: $cookies.get('loses'),
+      score: $cookies.get('score')
+    };
+
+    return $http({
+      method: 'PUT',
+      url: serverURL + '/leaderboard',
+      params: userUpdate
+    });
+  };
   ///////////////////////////
   //    Factory Interface  //
   ///////////////////////////
@@ -399,6 +417,7 @@ angular.module('rehjeks.factories', [
     getChallenge: getChallenge,
     fetchRandomQuestion: fetchRandomQuestion,
     getUsers: getUsers,
+    updateScore: updateScore,
     currentChallenge: currentChallenge,
     submitUserSolution: submitUserSolution,
     submitNewChallenge: submitNewChallenge,
