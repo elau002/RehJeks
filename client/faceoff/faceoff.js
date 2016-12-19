@@ -64,6 +64,7 @@ angular.module('rehjeks.faceoff', [
 
   $scope.regexValid;
   $scope.attempt;
+  
   // $scope.challengeData = {};
   $scope.seconds = 0;
   $scope.minutes = 0;
@@ -74,7 +75,7 @@ angular.module('rehjeks.faceoff', [
   //new scope variables
   $scope.solved = false;
   $scope.solvedLocal = false;
-
+  $scope.finalAnswer;
   //faceoffmode variables
 
   $scope.faceOffChallengeData = {}; //might not need, depends on if we can pass straight ot challengeData
@@ -114,11 +115,11 @@ angular.module('rehjeks.faceoff', [
     
     $scope.checkRegex();
     if ($scope.checkSolution()) {
-      //send lose
-      PUBNUB.publish({lose: 'lose'}, $cookies.get('username'));
+      $scope.finalAnswer = $scope.attempt;
       //send final input
       PUBNUB.publish({input: $scope.attempt}, $cookies.get('username'));
-      
+      //send lose
+      PUBNUB.publish({end: 'lose'}, $cookies.get('username'));
       //run win function
       $scope.winFaceoff();
     }
@@ -129,7 +130,12 @@ angular.module('rehjeks.faceoff', [
   };
 
   $scope.leaveFaceoff = function() {
-    PUBNUB.publish({end: 'lose'}, $scope.opponentName);
+    //lose actions
+    $scope.loseFaceoff();
+
+    //end subscriptions
+
+    //redirect
 
   };
 
@@ -142,7 +148,13 @@ angular.module('rehjeks.faceoff', [
     //send a win to the database for the this user
 
   };
+  $scope.loseFaceoff = function() {
+    $scope.faceoffFinishedFlag = true;
+    $scope.faceoffWonFlag = false;
 
+    //send loss to database for this user
+
+  };
   $scope.highlightOpponent = function() {
     //do we need to check if Regex is valid?
     let currentOpponentRegex = RegexParser($scope.opponentAttempt);
@@ -281,14 +293,21 @@ angular.module('rehjeks.faceoff', [
 
   $scope.$watch(function() {
     console.log('digest ran');
+    console.log(PUBNUB.getGameOver());
   }); 
 
   $scope.$watch(PUBNUB.getInput, function(newVal, oldVal) {
-    console.log(newVal);
-    console.log(oldVal);
     $scope.opponentAttempt = newVal || '//gi';
     if ($scope.faceoffChallengeData !== undefined) {
       $scope.highlightOpponent();
+    }
+  });
+
+  $scope.$watch(PUBNUB.getGameOver, function(newVal, oldVal) {
+    console.log('old end', oldVal);
+    console.log('new end', newVal);
+    if (newVal === 'lose') {
+      $scope.loseFaceoff();
     }
   });
 
