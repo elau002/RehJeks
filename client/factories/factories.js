@@ -37,6 +37,9 @@ angular.module('rehjeks.factories', [
 
         // Set cookies if login successful!
         document.cookie = `username=${successRes.data.username}; userId=${successRes.data.userid};`;
+        document.cookie = `userScore =${successRes.data.score};`;
+        document.cookie = `wins = ${successRes.data.wins};`;
+        document.cookie = `loses = ${successRes.data.loses};`;
 
         // This will change the "Login" anchor tag in the navbar to your username
         $scope.loggedin = true;
@@ -63,7 +66,153 @@ angular.module('rehjeks.factories', [
 
   return {
     authorize: authorize,
-    logout: logout
+    logout: logout,
+  };
+})
+
+//join queue
+  //gets sent message of channel to join
+    //subscribe to author of messages channel
+    //leave queue
+  //if no message sent, then listening for new presence
+  //on new presence, 
+    //send message containing your username and their username
+    //subscribe to new partners channel
+    //leave queue
+
+
+//require auth/being signed in
+//figure out how to access currently logged in user
+.factory('PUBNUB', function($http, $location, $cookies, $state, $sanitize, Pubnub, Server) {
+  //subscribe to a channel
+  var subscribe = function(channelNameArray) {
+    //subscribe with given channel, with presence true
+    Pubnub.subscribe({
+      channels: channelNameArray, 
+      withPresence: true,
+      triggerEvents: true
+    });
+    console.log('subscribed to channels ', channelNameArray);
+  };
+
+  //publish to channel
+  var publish = function(message, channel) {
+    //publish to given channel, with given message
+    Pubnub.publish({
+      message: message, 
+      channel: channel
+    });
+  };
+
+ 
+
+  //store current partner in competition
+  var partner = {};
+  var challenge = {};
+  var gameOver = {};
+  var input = {};
+
+  //define function to invite a  user to chat
+  var inviteUserInQueue = function(otherUser, challenge) { 
+
+    publish([otherUser, $cookies.get('username'), challenge], 'queue');
+  };
+
+   //unsubscribe to channel--call with no args to unsub all and reset factory values
+  var unsubscribe = function(unsubArray) {
+    //unsubscribe to given channel 
+    if (unsubArray === undefined) {
+      Pubnub.unsubscribeAll();
+      partner = {};
+      challenge = {};
+      gameOver = {};
+      input = {};
+    } else {
+      Pubnub.unsubscribe({channels: unsubArray});
+    }
+  };
+  
+  //initialize with uid of the currently logged in user
+  //includes .once function, so will need to be re-intialized for every new queueing
+  var initPubnub = function() {
+    Pubnub.init({
+      subscribeKey: 'sub-c-c95e1814-c251-11e6-b38f-02ee2ddab7fe',
+      publishKey: 'pub-c-6d77ac1d-8da3-4140-9a9a-c0da9b0c0bf9',
+      uuid: $cookies.get('username'), 
+      ssl: true,
+    });
+
+    console.log('started Pubnub as ', Pubnub.getUUID());
+
+    return Server.fetchRandomQuestion()
+    .then( (result) => {
+      console.log('got challenge ', result.data);
+      partner = {};
+      challenge.value = result.data;
+      gameOver = {};
+      input = {};
+      //add listeners
+      Pubnub.addListener({
+      //on new presence
+        presence: function(p) {
+        //if someone joins the queue channel
+          if (p.action === 'join' && p.channel === 'queue' && p.uuid !== $cookies.get('username') && !partner.value) {
+          //if no partner  
+            unsubscribe(['queue']); 
+            partner.value = p.uuid;
+            inviteUserInQueue(p.uuid, challenge); 
+            subscribe([p.uuid]);
+            $state.go('faceoff');
+          }
+        },
+      //on message  
+        message: function(m) {
+        //if message from queue 
+          if (m.channel === 'queue') {
+          //if contains username, 
+            if (m.message[0] === $cookies.get('username') && !partner.value) {
+              //subscribe to other persons channel
+              unsubscribe(['queue']);
+              challenge.value = m.message[2].value;
+              partner.value = m.message[1];
+              subscribe([m.message[1]]);
+              $state.go('faceoff');
+            }
+          }
+          if (m.message.end) {
+            gameOver.value = m.message.end;
+          }
+          if (m.message.input) {
+            input.value = m.message.input;
+          }
+        },
+        status: function(s) {
+          console.log(s);
+        }
+      });
+    });
+  };
+  
+  window.onbeforeunload = function () {
+    Pubnub.unsubscribeAll(); 
+  };
+  
+  var getInput = function() {
+    return input.value;
+  };
+  var getGameOver = function() {
+    return gameOver.value;
+  };
+  return {
+    initPubnub: initPubnub,
+    subscribe: subscribe,
+    unsubscribe: unsubscribe,
+    publish: publish,
+    challenge: challenge,
+    gameOver: gameOver,
+    input: input,
+    getInput: getInput,
+    getGameOver: getGameOver
   };
 
 
@@ -71,7 +220,7 @@ angular.module('rehjeks.factories', [
 
 .factory('Server', function($http, $location, $cookies, $sanitize) {
 
-  var serverURL = $location.protocol() + '://' + location.host;
+  var serverURL = $location.protocol() + '://' + location.host; 
   //shared acces for Challenges and Solve Controller
   var currentChallenge = {data: undefined};
 
@@ -119,18 +268,16 @@ angular.module('rehjeks.factories', [
   };
 
   var getUsers = function($scope) {
-
     return $http({
-      method:'GET',
+      method: 'GET',
       url: serverURL + '/leaderboard',
     })
     .then(function(allUsers) {
-      console.log(allUsers.data)
-      $scope.leaders = allUsers.data
+      $scope.leaders = allUsers.data;
     })
-    .catch(function(err){
-      console.log(err)
-    })
+    .catch(function(err) {
+      console.log(err);
+    });
   };
   //Gets all challenges
 
@@ -156,7 +303,6 @@ angular.module('rehjeks.factories', [
 
   var getUserChallenges = function($scope) {
     // Getting user specific challenges to display on profile
-
     return $http({
       method: 'GET',
       url: serverURL + '/challenges',
@@ -167,6 +313,14 @@ angular.module('rehjeks.factories', [
       $scope.user.challenges = challenges.data;
     });
   };
+
+  var fetchRandomQuestion = function($scope) {
+    return $http({
+      method: 'GET',
+      url: serverURL + '/vschallenge',
+      paramSerializer: '$httpParamSerializerJQLike'
+    });
+  }; 
 
   //SETs currentChallengeData to returned Data
 
@@ -202,7 +356,7 @@ angular.module('rehjeks.factories', [
 
   var submitNewChallenge = function($scope) {
 
-    let {submitData:{title, prompt, text, difficulty, expected, answer, cheats}} = $scope;
+    let {submitData: {title, prompt, text, difficulty, expected, answer, cheats}} = $scope;
 
     text = $sanitize(text);
 
@@ -235,7 +389,22 @@ angular.module('rehjeks.factories', [
       params: {challengeId: id, quantity: 5}
     });
 
-  }
+  };
+
+  var updateScore = function($scope) {
+    var userUpdate = {
+      username: $cookies.get('username'),
+      wins: $cookies.get('wins'),
+      loses: $cookies.get('loses'),
+      score: $cookies.get('userScore')
+    };
+
+    return $http({
+      method: 'PUT',
+      url: serverURL + '/leaderboard',
+      data: JSON.stringify(userUpdate)
+    });
+  };
   ///////////////////////////
   //    Factory Interface  //
   ///////////////////////////
@@ -245,7 +414,9 @@ angular.module('rehjeks.factories', [
     getUserChallenges: getUserChallenges,
     getRandom: getRandom,
     getChallenge: getChallenge,
+    fetchRandomQuestion: fetchRandomQuestion,
     getUsers: getUsers,
+    updateScore: updateScore,
     currentChallenge: currentChallenge,
     submitUserSolution: submitUserSolution,
     submitNewChallenge: submitNewChallenge,
@@ -268,3 +439,4 @@ angular.module('rehjeks.factories', [
 
   return makeRegex;
 });
+

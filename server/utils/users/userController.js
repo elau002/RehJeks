@@ -26,15 +26,14 @@ var passport = require('passport');
 module.exports.signup = function(req, res, next) {
   var { body: {username, password} } = req;
 
-  User.register(new User({ username : username }), password, function(err, account) {
+  User.register(new User({ username: username }), password, function(err, account) {
     if (err) {
       next(new Error('error registering user'));
-    }
-    else{
+    } else {
       passport.authenticate('local')(req, res, function () {
-      console.log('authenticated!');
-      res.json({message: 'Success', username: req.user.username, userid: req.user.id});
-    });
+        console.log('authenticated!');
+        res.json({message: 'Success', username: req.user.username, userid: req.user.id, score: req.user.score, wins: req.user.wins, loses: req.user.loses});
+      });
     }
   });
 };
@@ -44,10 +43,18 @@ module.exports.logout = function(req, res, next) {
 };
 
 module.exports.getUsers = function(req, res) {
-  console.log('hello');
-  User.find(function(err, user){
-    if(err) { res.status(500).send(err)}
-    console.log(user);
+  User.find(function(err, user) {
+    if (err) { res.status(500).send(err); }
     res.send(user);
-  })
-}
+  });
+};
+
+module.exports.updateScore = function(req, res) {
+  User.findOneAndUpdate({username: req.body.username}, 
+    {$set: { wins: req.body.wins,
+      loses: req.body.loses,
+      score: req.body.score
+    }}, function () {
+      res.send(204);
+    });
+};
